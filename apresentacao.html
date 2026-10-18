@@ -72,7 +72,7 @@ body.nocursor{cursor:none}
 
 /* Barra de progresso, contador e dicas */
 #bar{position:absolute;left:0;bottom:0;height:5px;background:var(--gold);width:0;transition:width .4s ease;opacity:.75;z-index:5}
-#num{position:absolute;right:46px;top:40px;font-size:22px;font-weight:800;letter-spacing:.08em;color:#fff;opacity:.4;z-index:5;font-variant-numeric:tabular-nums}
+#num{position:absolute;right:46px;top:40px;font-size:22px;font-weight:800;letter-spacing:.08em;color:#fff;opacity:.5;z-index:5;font-variant-numeric:tabular-nums;text-shadow:0 1px 3px rgba(0,0,0,.7),0 0 12px rgba(0,0,0,.5)}
 #hint{position:absolute;left:150px;bottom:64px;font-size:23px;font-weight:700;color:#fff;opacity:.38;letter-spacing:.04em;z-index:5;transition:opacity .6s}
 body.used #hint{opacity:0}
 #hint kbd{font:inherit;border:2px solid rgba(255,255,255,.5);border-radius:6px;padding:0 8px;margin:0 2px}
@@ -363,6 +363,7 @@ function init(){
   fitStage();
   const h = parseInt(location.hash.slice(1), 10);
   go(isNaN(h) ? 0 : h - 1);
+  if (/[?&]menu/.test(location.search)) toggle(menu, true);   // ?menu abre logo o menu de saltos
   addEventListener("resize", fitStage);
   addEventListener("hashchange", () => { const h = parseInt(location.hash.slice(1), 10); if (!isNaN(h)) go(h - 1); });
   addEventListener("keydown", e => {
@@ -479,12 +480,12 @@ function focalPenit(p, r){
   return s;
 }
 function focalAleluia(p, r){
-  let s = `<defs>${radial(p + "bg", "#ffe9a0", .95, .45, true)}</defs>` + rays(1440, 700, 20, 2400, .035, "#fff0b8", .2, 70) + `<circle cx="1440" cy="700" r="520" fill="url(#${p}bg)" class="pulse" style="--dur:4.5s"/>`;
+  let s = `<defs>${radial(p + "bg", "#ffe9a0", .95, .45, true)}</defs>` + rays(1500, 700, 20, 2400, .035, "#fff0b8", .16, 70) + `<circle cx="1500" cy="700" r="520" fill="url(#${p}bg)" class="pulse" style="--dur:4.5s"/>`;
   const book = `M-300 -20 Q-150 -62 0 -10 Q150 -62 300 -20 L300 150 Q150 108 0 160 Q-150 108 -300 150 Z`;
-  s += `<g transform="translate(1440 740)"><path d="${book}" fill="#3a1a08" opacity=".35" transform="translate(0 16)"/><path d="${book}" fill="#fff8e6"/><path d="M0 -10 V160" stroke="#d9b76a" stroke-width="6"/><path d="M-300 -20 Q-150 -62 0 -10 Q150 -62 300 -20" fill="none" stroke="#b98f42" stroke-width="8" stroke-linejoin="round"/>`;
+  s += `<g transform="translate(1500 740)"><path d="${book}" fill="#3a1a08" opacity=".35" transform="translate(0 16)"/><path d="${book}" fill="#fff8e6"/><path d="M0 -10 V160" stroke="#d9b76a" stroke-width="6"/><path d="M-300 -20 Q-150 -62 0 -10 Q150 -62 300 -20" fill="none" stroke="#b98f42" stroke-width="8" stroke-linejoin="round"/>`;
   for (let i = 0; i < 4; i++){ const y = 30 + i * 28; s += `<path d="M-256 ${y} Q-150 ${y - 14} -40 ${y}" stroke="#cdbb8f" stroke-width="6" stroke-linecap="round" fill="none"/><path d="M40 ${y} Q150 ${y - 14} 256 ${y}" stroke="#cdbb8f" stroke-width="6" stroke-linecap="round" fill="none"/>`; }
   s += "</g>";
-  "ALELUIA".split("").forEach((ch, i) => { const dur = 9 + (i % 3); s += `<g transform="translate(${1330 + i * 36} 700)"><g class="flyUp" style="--dur:${dur}s;--dl:${f1(-i * 1.4)}s"><text font-family="var(--serif)" font-weight="700" font-size="${58 + (i % 3) * 10}" fill="#fff3c4" text-anchor="middle" transform="rotate(${(i % 2 ? 1 : -1) * 12})">${ch}</text></g></g>`; });
+  "ALELUIA".split("").forEach((ch, i) => { const dur = 9 + (i % 3); s += `<g transform="translate(${1390 + i * 36} 700)"><g class="flyUp" style="--dur:${dur}s;--dl:${f1(-i * 1.4)}s"><text font-family="var(--serif)" font-weight="700" font-size="${58 + (i % 3) * 10}" fill="#fff3c4" text-anchor="middle" transform="rotate(${(i % 2 ? 1 : -1) * 12})">${ch}</text></g></g>`; });
   [[1440, 690, 1.8, 11, 0], [1540, 700, 2.2, 13, -5], [1480, 710, 1.5, 12, -9]].forEach(([x, y, sc, dur, dl]) => { s += `<g transform="translate(${x} ${y})"><g class="flyUp" style="--dur:${dur}s;--dl:${dl}s">${dove(sc)}</g></g>`; });
   return s;
 }
@@ -500,7 +501,7 @@ function focalOfert(p, r){
   return s;
 }
 function angel(x, y, sc, dur, dl){
-  return `<g transform="translate(${x} ${y}) scale(${sc})"><g class="float" style="--dur:${dur}s;--dl:${dl}s"><ellipse cx="0" cy="-78" rx="30" ry="9" fill="none" stroke="#ffe9a8" stroke-width="5" class="glow" style="--dur:3s"/><g class="flap" style="transform-origin:100% 90%;animation-duration:1.8s"><path d="M-14 -10 Q-110 -70 -92 30 Q-50 28 -14 12 Z" fill="#fff" opacity=".92"/></g><g class="flap" style="transform-origin:0% 90%;animation-duration:1.8s;animation-direction:alternate-reverse"><path d="M14 -10 Q110 -70 92 30 Q50 28 14 12 Z" fill="#fff" opacity=".92"/></g><circle cy="-50" r="18" fill="#fff"/><path d="M-34 70 Q-22 -26 0 -32 Q22 -26 34 70 Z" fill="#fff"/></g></g>`;
+  return `<g transform="translate(${x} ${y}) scale(${sc})"><g class="float" style="--dur:${dur}s;--dl:${dl}s"><ellipse cx="0" cy="-78" rx="30" ry="9" fill="none" stroke="#ffe9a8" stroke-width="5" class="glow" style="--dur:3s"/><g class="flap" style="transform-origin:100% 90%;animation-duration:1.8s"><path d="M-14 -12 Q-60 -92 -128 -56 Q-140 -22 -112 -2 Q-118 32 -82 30 Q-54 48 -14 12 Z" fill="#fff" opacity=".94"/><path d="M-20 -8 Q-70 -50 -104 -40" stroke="#dfe7ff" stroke-width="3" fill="none" opacity=".7"/></g><g class="flap" style="transform-origin:0% 90%;animation-duration:1.8s;animation-direction:alternate-reverse"><path d="M14 -12 Q60 -92 128 -56 Q140 -22 112 -2 Q118 32 82 30 Q54 48 14 12 Z" fill="#fff" opacity=".94"/><path d="M20 -8 Q70 -50 104 -40" stroke="#dfe7ff" stroke-width="3" fill="none" opacity=".7"/></g><circle cy="-50" r="18" fill="#fff"/><path d="M-34 70 Q-22 -26 0 -32 Q22 -26 34 70 Z" fill="#fff"/></g></g>`;
 }
 function focalSanto(p, r){
   let s = `<defs>${radial(p + "ng", "#bcd0ff", .5, .18, true)}</defs><circle cx="1480" cy="520" r="520" fill="url(#${p}ng)" class="pulse" style="--dur:8s"/>`;
@@ -521,11 +522,11 @@ function focalCordeiro(p, r){
   return s;
 }
 function focalComunhao(p, r){
-  const cx = 1420, cy = 520, cols = ["#ffd9a8", "#ffb37a", "#f7f0e8", "#e8a0b0", "#9fd3ff", "#c8f0c0"];
+  const cx = 1490, cy = 520, cols = ["#ffd9a8", "#ffb37a", "#f7f0e8", "#e8a0b0", "#9fd3ff", "#c8f0c0"];
   let s = `<defs>${radial(p + "hg", "#fff1c8", .95, .5, true)}</defs>`;
-  const ppl = []; for (let i = 0; i < 12; i++){ const a = -Math.PI / 2 + i * Math.PI * 2 / 12; ppl.push({ x: cx + Math.cos(a) * 470, y: cy + Math.sin(a) * 250, sc: .72 + (Math.sin(a) + 1) * .3, i }); }
+  const ppl = []; for (let i = 0; i < 12; i++){ const a = -Math.PI / 2 + i * Math.PI * 2 / 12; ppl.push({ x: cx + Math.cos(a) * 420, y: cy + Math.sin(a) * 250, sc: .72 + (Math.sin(a) + 1) * .3, i }); }
   ppl.sort((a, b) => a.y - b.y);
-  const host = `<g transform="translate(${cx} ${cy})"><circle r="400" fill="url(#${p}hg)" class="pulse" style="--dur:5s"/>${rays(0, 0, 16, 520, .04, "#fff3d0", .35, 90)}<g class="glow" style="--dur:4s"><circle r="100" fill="#fff8e6"/><circle r="100" fill="none" stroke="#e8c877" stroke-width="7"/><path d="M0 -54 V54 M-54 0 H54" stroke="#d9b76a" stroke-width="11" stroke-linecap="round"/></g></g>`;
+  const host = `<g transform="translate(${cx} ${cy})"><circle r="400" fill="url(#${p}hg)" class="pulse" style="--dur:5s"/>${rays(0, 0, 16, 520, .04, "#fff3d0", .26, 90)}<g class="glow" style="--dur:4s"><circle r="100" fill="#fff8e6"/><circle r="100" fill="none" stroke="#e8c877" stroke-width="7"/><path d="M0 -54 V54 M-54 0 H54" stroke="#d9b76a" stroke-width="11" stroke-linecap="round"/></g></g>`;
   let hostDone = false;
   ppl.forEach(q => { if (!hostDone && q.y > cy){ s += host; hostDone = true; } s += `<g transform="translate(${q.x|0} ${(q.y + 60)|0}) scale(${f1(q.sc)})"><g class="float" style="--dur:${4 + q.i % 3}s;--dl:${f1(-q.i * .7)}s">${person(cols[q.i % cols.length])}</g></g>`; });
   return s;
