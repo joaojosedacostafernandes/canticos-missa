@@ -30,18 +30,29 @@ body.nocursor{cursor:none}
 .m-cordeiro{--c1:#0d3a30;--c2:#2a7a62;--acc:#dcffe9}
 .m-comunhao{--c1:#3a0a16;--c2:#8c2238;--acc:#ffd9a8}
 .m-final{--c1:#0b2d6b;--c2:#3a86d8;--acc:#ffe17a}
+/* Partes faladas e rezadas da missa (o Confesso usa a paleta penitencial, a preparação dos dons a do ofertório, o convite à comunhão a da comunhão) */
+.m-inicio{--c1:#0b1c3c;--c2:#1f4a8a;--acc:#f0d48a}
+.m-gloria{--c1:#3a2608;--c2:#b9861c;--acc:#fff4c8}
+.m-palavra{--c1:#082a36;--c2:#156478;--acc:#ffe6a8}
+.m-homilia{--c1:#141a24;--c2:#2e3a4c;--acc:#d9c48a}
+.m-credo{--c1:#0a0f2e;--c2:#262c6b;--acc:#f0d48a}
+.m-eucaristica{--c1:#2a0c0c;--c2:#6e2a1e;--acc:#ffd98a}
+.m-painosso{--c1:#13263d;--c2:#2f5f8a;--acc:#ffe2a0}
+.m-conclusao{--c1:#132a52;--c2:#2d5a9c;--acc:#f0d48a}
 
 .slide{position:absolute;inset:0;display:none;overflow:hidden;background:var(--c1) radial-gradient(ellipse 110% 95% at 72% 28%,var(--c2) 0%,var(--c1) 100%)}
 .slide.on{display:block;z-index:2;animation:enter .5s cubic-bezier(.2,.7,.2,1) both}
 .slide.off{display:block;z-index:1;animation:leave .45s ease-in both;pointer-events:none}
 .bg,.art,.veil{position:absolute;inset:0}
 .bg svg,.art svg{width:100%;height:100%;display:block}
-.t-lyric .veil{background:radial-gradient(ellipse 62% 60% at 50% 52%,rgba(0,0,0,.42) 0%,rgba(0,0,0,.2) 55%,rgba(0,0,0,0) 100%)}
-.t-title .veil,.t-open .veil,.t-close .veil,.t-pause .veil{background:linear-gradient(90deg,rgba(0,0,0,.50) 0%,rgba(0,0,0,.34) 48%,rgba(0,0,0,.05) 72%,rgba(0,0,0,0) 100%)}
+.t-lyric .veil,.l-wide .veil,.l-center .veil{background:radial-gradient(ellipse 62% 60% at 50% 52%,rgba(0,0,0,.42) 0%,rgba(0,0,0,.2) 55%,rgba(0,0,0,0) 100%)}
+.l-side .veil{background:linear-gradient(90deg,rgba(0,0,0,.50) 0%,rgba(0,0,0,.34) 48%,rgba(0,0,0,.05) 72%,rgba(0,0,0,0) 100%)}
 .t-open .veil,.t-close .veil,.t-pause .veil{background:linear-gradient(90deg,rgba(0,0,0,.42) 0%,rgba(0,0,0,.28) 50%,rgba(0,0,0,0) 78%)}
 
-/* Letra */
-.lyr{position:absolute;left:120px;right:120px;top:120px;bottom:120px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:12px;--fs:78px}
+/* Letra: .lyr é a caixa; .in o conteúdo (medido pelo ajuste automático); .st cada estrofe */
+.lyr{position:absolute;left:120px;right:120px;top:120px;bottom:120px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;--fs:78px}
+.lyr .in,.lyr .st{display:flex;flex-direction:column;align-items:center;gap:12px}
+.lyr .st+.st{margin-top:calc(var(--fs)*.5)}
 .ln{font-weight:800;font-size:var(--fs);line-height:1.22;white-space:nowrap;letter-spacing:.005em;color:#fff;
   text-shadow:0 3px 6px rgba(0,0,0,.45),0 10px 34px rgba(0,0,0,.5);
   animation:up .55s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--d)*95ms + 120ms)}
@@ -51,10 +62,30 @@ body.nocursor{cursor:none}
 .refrain .ln{color:#fff3cc;text-shadow:0 0 28px rgba(255,214,110,.55),0 3px 6px rgba(0,0,0,.45),0 10px 34px rgba(0,0,0,.5)}
 .refrain .ln.echo{color:var(--acc)}
 .tag{font-size:28px;font-weight:900;letter-spacing:.24em;text-transform:uppercase;color:#2a1d05;background:linear-gradient(180deg,#f6dc98,#d8b460);border-radius:999px;padding:8px 26px 6px;margin-bottom:22px;box-shadow:0 4px 18px rgba(0,0,0,.35);animation:up .5s ease-out both}
-.crumb{position:absolute;left:56px;top:40px;font-size:27px;font-weight:800;letter-spacing:.06em;color:#fff;opacity:.72;text-shadow:0 2px 8px rgba(0,0,0,.6);display:flex;align-items:center;gap:16px}
+.crumb{position:absolute;left:56px;top:40px;font-size:29px;font-weight:800;letter-spacing:.06em;color:#fff;opacity:.74;text-shadow:0 2px 8px rgba(0,0,0,.6);display:flex;align-items:center;gap:16px}
 .crumb i{display:inline-block;width:14px;height:14px;border-radius:50%;background:var(--acc);box-shadow:0 0 14px var(--acc)}
 .crumb b{text-transform:uppercase;letter-spacing:.16em}
 .crumb span{font-weight:700;opacity:.85}
+
+/* Partes da missa: grelha "quem fala | texto". Sacerdote em letra pequena e suave; Todos (o povo) em letra grande.
+   .wide ocupa toda a largura, .side deixa a direita para a ilustração, .center só tem título (Homilia). */
+.rite{position:absolute;left:120px;right:120px;top:100px;bottom:100px;display:flex;flex-direction:column;justify-content:center;--fs:54px}
+.rite.side{left:150px;right:auto;width:1080px}
+.rite .in{display:grid;grid-template-columns:max-content 1fr;column-gap:34px;row-gap:12px;align-items:start;width:max-content;max-width:100%;margin:0 auto}
+.rite.side .in{margin:0}
+.rite .row{display:contents}
+.rite .who,.rite p,.rite .rr,.rite .rh{animation:up .5s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--d)*80ms + 100ms)}
+.rite .who{font-size:calc(var(--fs)*.4);font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:var(--acc);padding-top:calc(var(--fs)*.4);min-width:4.2em;text-shadow:0 2px 6px rgba(0,0,0,.6);white-space:nowrap}
+.rite p{font-size:var(--fs);line-height:1.28;font-weight:800;color:#fff;text-wrap:pretty;text-shadow:0 3px 6px rgba(0,0,0,.45),0 10px 34px rgba(0,0,0,.5)}
+.rite .T p{color:#fff6dc;text-shadow:0 0 24px rgba(255,214,110,.3),0 3px 6px rgba(0,0,0,.45),0 10px 34px rgba(0,0,0,.5)}
+.rite .S p{font-size:calc(var(--fs)*.7);line-height:1.3;font-weight:700;color:rgba(255,255,255,.76)}
+.rite .S .who{color:rgba(255,255,255,.5);padding-top:calc(var(--fs)*.2)}
+.rite .rh{grid-column:1/-1;font-family:var(--serif);font-weight:700;font-size:calc(var(--fs)*2.4);line-height:1.02;letter-spacing:-.01em;color:#fff;margin:0 0 .12em;text-shadow:0 3px 8px rgba(0,0,0,.5),0 14px 40px rgba(0,0,0,.45)}
+.rite .rr{grid-column:1/-1;font-size:calc(var(--fs)*.56);font-style:italic;font-weight:700;color:rgba(255,255,255,.72);text-shadow:0 2px 6px rgba(0,0,0,.6)}
+.rite .gap{grid-column:1/-1;height:calc(var(--fs)*.45)}
+.rite.center{align-items:center;text-align:center}
+.rite.center .in{display:flex;flex-direction:column;align-items:center}
+.rite.center .rh{font-size:calc(var(--fs)*3.2)}
 
 /* Título do momento */
 .tt{position:absolute;left:150px;top:0;bottom:0;width:1060px;display:flex;flex-direction:column;justify-content:center;text-shadow:0 3px 8px rgba(0,0,0,.5),0 14px 40px rgba(0,0,0,.45)}
@@ -85,15 +116,17 @@ body.used #hint{opacity:0}
 #white .wm{position:absolute;left:0;right:0;bottom:60px;text-align:center;font-family:var(--serif);font-size:34px;color:var(--blue);opacity:.55}
 #menu{background:rgba(6,14,32,.9);backdrop-filter:blur(8px);padding:70px 110px;display:none;flex-direction:column}
 #menu.on{display:flex}
-#menu h3{font-family:var(--serif);font-weight:600;font-size:52px;color:var(--goldl);margin-bottom:34px}
-#menu .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
-#menu button{font:inherit;text-align:left;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.14);border-radius:18px;padding:24px 26px;color:#fff;cursor:pointer;display:flex;gap:22px;align-items:center;transition:background .15s,border-color .15s}
+#menu h3{font-family:var(--serif);font-weight:600;font-size:48px;color:var(--goldl);margin-bottom:26px}
+#menu .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+#menu button{font:inherit;text-align:left;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.14);border-radius:16px;padding:14px 18px;color:#fff;cursor:pointer;display:flex;gap:16px;align-items:center;transition:background .15s,border-color .15s;min-height:92px}
 #menu button:hover,#menu button:focus-visible{background:rgba(255,255,255,.18);border-color:var(--goldl);outline:none}
 #menu button.cur{border-color:var(--goldl);box-shadow:0 0 0 3px rgba(240,212,138,.35) inset}
-#menu kbd{font:900 40px var(--sans);width:72px;height:72px;border-radius:14px;background:var(--gold);color:#1b1b1b;display:grid;place-items:center;flex:none}
-#menu .l{font-size:34px;font-weight:800;line-height:1.1}
-#menu .s{font-size:24px;font-weight:700;opacity:.75;margin-top:4px}
-#menu .keys{margin-top:auto;font-size:24px;font-weight:700;opacity:.7;line-height:1.7}
+#menu kbd{font:900 32px var(--sans);width:56px;height:56px;border-radius:12px;background:var(--gold);color:#1b1b1b;display:grid;place-items:center;flex:none}
+#menu kbd:empty{background:rgba(255,255,255,.12);box-shadow:0 0 0 2px rgba(255,255,255,.12) inset}
+#menu kbd:empty::before{content:"";width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.45)}
+#menu .l{font-size:27px;font-weight:800;line-height:1.08}
+#menu .s{font-size:20px;font-weight:700;opacity:.75;margin-top:3px}
+#menu .keys{margin-top:auto;font-size:22px;font-weight:700;opacity:.7;line-height:1.7}
 #menu .keys kbd{display:inline-grid;width:auto;min-width:44px;height:40px;font-size:22px;padding:0 10px;margin:0 6px 0 2px;vertical-align:middle}
 
 /* Animações */
@@ -146,7 +179,7 @@ svg .breathe{transform-box:fill-box;transform-origin:50% 100%;animation:breathe 
 @media (prefers-reduced-motion:reduce){
   svg *{animation-duration:.01s!important;animation-iteration-count:1!important}
   svg .rise,svg .fall,svg .flyUp{display:none}
-  .slide.on,.slide.off,.ln,.tag,.tt *{animation-duration:.01s!important}
+  .slide.on,.slide.off,.ln,.tag,.tt *,.rite *{animation-duration:.01s!important}
   #bar{transition:none}
 }
 </style>
@@ -156,22 +189,28 @@ svg .breathe{transform-box:fill-box;transform-origin:50% 100%;animation:breathe 
   <div id="slides"></div>
   <div id="bar"></div>
   <div id="num"></div>
-  <div id="hint"><kbd>→</kbd> avançar · <kbd>M</kbd> saltar para um momento · <kbd>F</kbd> ecrã inteiro · <kbd>B</kbd> ecrã preto</div>
+  <div id="hint"><kbd>→</kbd> avançar · <kbd>M</kbd> saltar para uma parte da missa · <kbd>F</kbd> ecrã inteiro · <kbd>B</kbd> ecrã preto</div>
   <div id="black" class="cover"></div>
   <div id="white" class="cover"><div class="wm">Igreja de Nossa Senhora do Rosário de Fátima · Póvoa de Santa Iria</div></div>
-  <div id="menu" class="cover"><h3>Saltar para um momento da missa</h3><div class="grid"></div>
-    <div class="keys"><kbd>→</kbd><kbd>Espaço</kbd><kbd>PgDn</kbd> avançar · <kbd>←</kbd><kbd>PgUp</kbd> recuar · <kbd>1</kbd>…<kbd>8</kbd> momentos · <kbd>0</kbd> boas-vindas · <kbd>9</kbd> despedida · <kbd>P</kbd> pausa<br>
+  <div id="menu" class="cover"><h3>Saltar para uma parte da missa</h3><div class="grid"></div>
+    <div class="keys"><kbd>→</kbd><kbd>Espaço</kbd><kbd>PgDn</kbd> avançar · <kbd>←</kbd><kbd>PgUp</kbd> recuar · <kbd>1</kbd>…<kbd>9</kbd> partes da missa (as que têm número) · <kbd>0</kbd> boas-vindas · <kbd>P</kbd> pausa<br>
     <kbd>F</kbd> ecrã inteiro · <kbd>B</kbd> ou <kbd>.</kbd> ecrã preto · <kbd>W</kbd> ecrã claro · <kbd>Home</kbd><kbd>End</kbd> início/fim · <kbd>Esc</kbd> fechar</div>
   </div>
 </div>
 <script>
 const SONGS = [{"m": "entrada", "n": "1.1", "t": "Vós todos sereis", "a": null, "yt": "https://www.youtube.com/watch?v=bG-9kHlIuEQ", "ytl": "Coro Clavis Dei", "q": "Vós todos sereis meu povo", "L": ["DÓ          SOL       LÁ-  MI-", "Vós todos sereis o Meu povo.", "   FÁ                            SOL", "Eu sempre serei vosso Deus;", "      DÓ      SOL     LÁ-  MI-", "Dar-vos-ei um coração novo", "    FÁ                        SOL       DÓ", "E infundirei o meu Espírito de Amor (2)", "", "DÓ                                MI-           FÁ", "Será um coração sem fronteiras,", "FÁ                              SOL", "onde todos tenham um lugar;", "DÓ                  MI-", "onde a única linguagem", "FÁ                    SOL", "seja o amor e a unidade.", "", "DÓ                                MI-           FÁ", "Será um coração que se comova,", "FÁ                              SOL", "levantará o que cansado está;", "DÓ                           MI-", "chorará com o que chora,", "FÁ                    SOL", "com o que ri sorrirá.", "", "Será um coração onde brote", "a justiça e a fidelidade;", "semeará a esperança,", "surgirá a verdade."], "capo": 1, "audio": "audio/1-entrada-vos-todos-sereis.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026"}, {"m": "penitencial", "n": "1.2", "t": "Senhor, tem piedade", "sub": "Povo pecador", "a": null, "yt": "https://www.youtube.com/watch?v=Ih6MXnwmFe8", "ytl": "DesafinaçõesTV", "q": "Senhor tem piedade somos o teu povo pecador", "L": ["SOL              RE           SOL  DO RE", "Senhor tem piedade de nós.", "SOL                               RE", "Somos o Teu povo pecador,", "DO                   RE     SOL         Mi-", "Toma a nossa vida de pecado e dor*", "DO                    RE            SOL   DO  RE", "Enche o nosso espírito de amor", "", "SOL      RE            SOL DO RE", "Cristo tem piedade de nós…", "Somos o Teu povo pecador,", "Toma a nossa vida de pecado e dor*", "Enche o nosso espírito de amor", "", "Senhor tem piedade de nós.", "Somos o Teu povo pecador,", "Toma a nossa vida de pecado e dor*", "Enche o nosso espírito de amor"], "capo": 2, "audio": "audio/2-ato-penitencial-senhor-tem-piedade.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026"}, {"m": "aleluia", "n": "1.3", "t": "Aleluia, a Palavra é Deus em nós", "a": null, "yt": "https://www.youtube.com/watch?v=8QBVUHwgo9c", "ytl": "Coro de Jovens SDR", "q": "Aleluia a Palavra é Deus em nós", "L": ["SOL  SI-  DO  RÉ", "", "", "SOL  SI-  DO            RÉ", "Aleluia, a .Pa.la.vra é Deus em nós*", "SOL  SI-       DO           RÉ", "Aleluia, a Palavra é Deus em nós*", " SOL       SI-   DO   RÉ", "Aleluia, Aleluia, Aleluia", "  SOL       SI-  DO   RE     SOL", "Aleluia, Aleluia, A – le – luia"], "capo": 3, "audio": "audio/3-aclamacao-aleluia-a-palavra-e-deus-em-nos.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026"}, {"m": "ofertorio", "n": "1.6", "t": "Louvado sejas, Senhor", "sub": "Pela vida de todos nós", "a": "Pe. Alfredo Juvandes", "yt": "https://www.youtube.com/watch?v=6OxEpFJAZhQ", "ytl": "Coro Juvenil S. Pedro do Mar", "q": "Louvado sejas Senhor pela vida de todos nós Juvandes", "L": ["RÉ  LÁ  SI-  FÁ#- SOL LÁ  RÉ", "", "RÉ              LÁ", "Pela vida de todos nós,", "SI-                    FÁ#", "Que sorri ao nascer do sol,", "SOL          RÉ", "Pela fé e a dor de quem sofre,", "   SOL               LÁ", "Louvado sejas, Senhor.", "", "RÉ                LÁ", "Pelo pão que nos faz viver,", "SI-                  FÁ#", "Pelo vinho que nos sacia,", "SOL                RÉ", "Pela fome de tantos sem pão,", "SOL          LÁ       RÉ", "Louvado sejas, Senhor.", "", "SOL                         LÁ", "Louvado sejas, Senhor", "          RÉ", "Louvado sejas!", "SOL                                                  LÁ", "Louvado por estes dons que nos dás,", "                RÉ", "Louvado sejas! (bis)", "", "RÉ                    LÁ         SI-", "Pela música e pela alegria,", "                      FÁ#", "Que ecoam bem dentro de nós,", "SOL                            RÉ", "Pelo sonho de um mundo em paz,", "SOL                       LÁ", "Louvado sejas, Senhor.", "", "RÉ                LÁ", "Pelo sol que aquece esta terra,", "SI-                         FÁ#", "Pela luz que ilumina o dia,", "SOL                        RÉ", "Pelo silêncio que fala de ti:", "SOL          LÁ        RÉ", "Louvado sejas, Senhor!"], "audio": "audio/4-ofertorio-louvado-sejas-senhor.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026"}, {"m": "santo", "n": "1.7", "t": "Santo, Santo é o Senhor", "sub": "Escuteiros", "a": null, "yt": "https://www.youtube.com/watch?v=5PDSoW2lKD4", "ytl": "Coral Juvenil de S. Tiago", "q": "Santo Santo é o Senhor escuteiros", "L": ["DO", "Santo Santo é o Senhor,", "                         (Santo Santo é o Senhor)", "                               RÉ-", "Senhor Deus do Universo,", "                        (Senhor Deus do Universo)", "                              SOL", "O céu e a terra proclamam", "                     (O céu e a terra proclamam)", "             DO    FÁ   DO", "a Vossa Gló-ó-ó-ó-ria! (BIS)", "", "   DO                  FÁ", "O céu e a terra proclamam a Vossa glória:", "  SOL                DO", "Hossana nas alturas!", "DO                                 FÁ", "Bendito o que vem em nome do Senhor:", " RÉ-          SOL     DO", "Hossana nas alturas!", "", "                DO", "Santo Santo é o Senhor…(1)"], "audio": "audio/5-santo-santo-santo-e-o-senhor.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026"}, {"m": "cordeiro", "n": "1.7", "t": "Cordeiro de Deus", "a": "Marcos Alvim", "yt": "https://www.youtube.com/watch?v=7DE3_wFMMiA", "ytl": "Coro de Jovens da Trofa (a gravação do cancioneiro Verbum Dei)", "q": "Cordeiro de Deus Marcos Alvim", "L": [" Ré       Fá#-", "Cordeiro de Deus", "    Si-                Fá#-", "Que tirais o pecado do mundo", "Sol              Fá#-", "Tende piedade de nós", "Sol              Lá", "Tende piedade de nós", "", "Cordeiro de Deus", "Que tirais o pecado do mundo", "Tende piedade de nós", "Tende piedade de nós", "", "Cordeiro de Deus", "Que tirais o pecado do mundo", "Dai-nos a vossa paz", "Dai-nos a vossa paz (2x)"], "audio": "audio/6-cordeiro-de-deus.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026"}, {"m": "comunhao", "n": "1.4", "t": "Eu escolhi-te para amar", "sub": "Amai o meu povo", "a": "M. Arrufat", "yt": "https://www.youtube.com/watch?v=oACWQcDeZ1w", "ytl": "Coro Juvenil S. Pedro do Mar", "q": "Amai o meu povo eu escolhi-te para amar", "L": ["RÉ  FÁ#- SOL LÁ   (2)", "", "RÉ                              FÁ#-", "Amai o Meu povo, diz o Senhor,", "  SOL    MI-        LÁ", "falai ao coração do homem,", "    MI-              SI-", "gritai que o amor venceu,", "                      MI-", "preparai o caminho que vem do Teu", " LÁ", "Redentor.", "RÉ      LÁ", "Eu escolhi-te para amar,", "                MI-     SI-", "Dou-te a força e luz para guiar.", "RÉ       LÁ", "Eu sou consolo em teu olhar,", "MI-          LÁ", "glória a Deus! (bis)", "", "RÉ                             FÁ#-", "Amai o Meu povo, diz o Senhor,", "SOL      MI-                   LÁ", "tirai a cegueira ao Meu povo.", "MI-                 SI-                  MI-", "Eu já fechei contigo a aliança perpétua,", "                         LÁ", "Eu sou o único Deus.", "", "RÉ      LÁ", "Eu escolhi-te para amar,", "                MI-     SI-", "Dou-te a força e luz para guiar.", "RÉ       LÁ                                   MI-", "Eu sou consolo em teu olhar, glória a", "LÁ", "Deus! (bis)", "", "RÉ                          FÁ#-", "Amai o Meu povo, diz o Senhor,", "SOL                      MI-                LÁ", "mostrai-lhes o caminho da liberdade.", "MI-                   SI-", "Eu vos darei fortes asas,", "                                     MI-", "transformarei vossos passos", "                 LÁ", "em caminhos de eternidade."], "audio": "audio/7-comunhao-eu-escolhi-te-para-amar.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026"}, {"m": "final", "n": "", "t": "Maria Lindíssima", "a": "Movimento dos Focolares", "yt": "https://www.youtube.com/watch?v=edayWDyodb8", "ytl": "Pedro das Neves (a gravação indicada no MusiCristo)", "q": "Maria Lindíssima Focolares", "L": ["Intro: MI  LÁ  SI", "", "MI                            LÁ                           SI", "A mais linda do Mundo, a mais linda desta terra", "MI                            LÁ                           SI", "És tão linda que Deus te escolheu", "MI                       LÁ         SI", "E és linda no Céu, és linda no Paraíso", "MI                                  LÁ                           SI", "És tão linda que o Céu te quer cantar", "", "FÁ#-                    DÓ#-        SI              MI", "Porque o Céu azul contém em ti", "FÁ#-                          DÓ#-               SI", "O sol que resplandece entre fogo", "FÁ#-                   DÓ#-     SI              MI", "Tu és o Céu azul maior porque", "LÁ                      FÁ#-            SI", "Tens em ti o Sol que é Jesus", "", "MI     SI         LÁ                      MI  SI", "Linda, és lindíssima Maria", "LÁ", "Como o Céu", "MI     SI         LÁ                      MI  SI", "Linda, és lindíssima Maria", "LÁ                                                                                               MI", "Se bem nós te imitarmos, seremos como, como tu", "", "MI                            LÁ                SI", "És a mãe do Mundo, és a mãe do belo Amor", "MI                     LÁ                        SI", "Do Amor infinito que é Jesus", "MI                            LÁ               SI", "És mãe de cada um, és a mãe de todos nós", "MI                            LÁ                               SI", "Que podemos também ser como tu", "", "FÁ#-                    DÓ#-        SI                        MI", "Quando nos amamos Jesus vem p'ra nós", "FÁ#-                          DÓ#-               SI", "É como se Ele nascesse outra vez", "FÁ#-                   DÓ#-     SI              MI", "E se amamos damos ao Mundo Jesus", "LÁ                      FÁ#-            SI", "E somos como pequenas Maria"], "capo": 2, "audio": "audio/8-saida-maria-lindissima.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026"}];
+const MISSA = {"_leia-me": ["Partes faladas e rezadas da missa, projetadas por esta ordem e intercaladas com os cânticos de cancioneiro-dados.json.", "TODOS OS DOMINGOS: basta editar o bloco 'variavel' (nome do domingo, oração coleta, refrão do salmo, resposta da oração universal) e correr: python build_cancioneiro.py", "Cada diapositivo tem 'm' (paleta de cores e ilustração), 'parte' (nome no menu e no canto superior esquerdo), 't' (título do diapositivo) e 'L' (linhas).", "Prefixos das linhas: 'S: ' sacerdote (letra pequena) · 'T: ' todos, o povo (letra grande) · 'R: ' indicação em letra pequena · '# ' título grande · linha sem prefixo continua quem falava antes · '' (vazia) deixa um espaço.", "{domingo}, {coleta}, {salmo} e {universal} são substituídos pelos valores do bloco 'variavel'.", "{\"cantico\": \"entrada\"} insere nesse ponto o cântico desse momento (entrada, penitencial, aleluia, ofertorio, santo, cordeiro, comunhao, final).", "Valores de 'm' com ilustração própria: inicio, penitencial, gloria, palavra, homilia, credo, ofertorio, eucaristica, painosso, comunhao, conclusao."], "variavel": {"domingo": "30.º Domingo do Tempo Comum · Ano C", "coleta": "Deus eterno e omnipotente, dai-nos a graça de consagrarmos sempre ao vosso serviço a dedicação da nossa vontade e a sinceridade do nosso coração. Por Nosso Senhor Jesus Cristo, vosso Filho, que é Deus convosco na unidade do Espírito Santo, por todos os séculos dos séculos.", "salmo": "O pobre clamou e o Senhor ouviu a sua voz.", "universal": "Lembrai-Vos, Senhor, do vosso povo."}, "missa": [{"cantico": "entrada"}, {"m": "inicio", "parte": "Ritos iniciais", "t": "Saudação", "L": ["S: Em nome do Pai e do Filho e do Espírito Santo.", "T: Ámen.", "", "S: A Graça de Nosso Senhor Jesus Cristo, o Amor do Pai e a Comunhão do Espírito Santo estejam convosco.", "T: Bendito seja Deus, que nos reuniu no Amor de Cristo."]}, {"m": "penitencial", "parte": "Ritos iniciais", "t": "Confesso", "L": ["S: Irmãos: para celebrarmos dignamente os santos mistérios, reconheçamos que somos pecadores.", "T: Confesso a Deus todo-poderoso", "e a vós, irmãos, que pequei muitas vezes", "por pensamentos e palavras, atos e omissões,", "por minha culpa, minha culpa, minha tão grande culpa.", "E peço à Virgem Maria, aos Anjos e Santos", "e a vós, irmãos, que rogueis por mim a Deus, nosso Senhor.", "", "S: Deus todo-poderoso tenha compaixão de nós, perdoe os nossos pecados e nos conduza à vida eterna.", "T: Ámen."]}, {"cantico": "penitencial"}, {"m": "gloria", "parte": "Glória", "t": "Glória (1 de 2)", "L": ["S: Glória a Deus nas alturas,", "T: e paz na terra aos homens por Ele amados.", "Senhor Deus, Rei dos céus, Deus Pai todo-poderoso:", "nós Vos louvamos, nós Vos bendizemos,", "nós Vos adoramos, nós Vos glorificamos,", "nós Vos damos graças, por Vossa imensa glória."]}, {"m": "gloria", "parte": "Glória", "t": "Glória (2 de 2)", "L": ["T: Senhor Jesus Cristo, Filho Unigénito,", "Senhor Deus, Cordeiro de Deus, Filho de Deus Pai:", "Vós que tirais o pecado do mundo, tende piedade de nós;", "Vós que tirais o pecado do mundo, acolhei a nossa súplica;", "Vós que estais à direita do Pai, tende piedade de nós.", "Só Vós sois o Santo; só Vós, o Senhor; só Vós, o Altíssimo, Jesus Cristo;", "com o Espírito Santo, na glória de Deus Pai. Ámen."]}, {"m": "inicio", "parte": "Oração coleta", "t": "Oração coleta", "L": ["S: Oremos.", "{coleta}", "T: Ámen."]}, {"m": "palavra", "parte": "Liturgia da Palavra", "t": "1.ª Leitura", "L": ["# 1.ª Leitura", "S: Palavra do Senhor.", "T: Graças a Deus."]}, {"m": "palavra", "parte": "Liturgia da Palavra", "t": "Salmo responsorial", "L": ["# Salmo", "R: Todos respondem:", "T: {salmo}"]}, {"m": "palavra", "parte": "Liturgia da Palavra", "t": "2.ª Leitura", "L": ["# 2.ª Leitura", "S: Palavra do Senhor.", "T: Graças a Deus."]}, {"cantico": "aleluia"}, {"m": "palavra", "parte": "Evangelho", "t": "Evangelho", "L": ["S: O Senhor esteja convosco.", "T: Ele está no meio de nós.", "S: Evangelho de Nosso Senhor Jesus Cristo segundo São…", "T: Glória a Vós, Senhor!", "", "S: Palavra da Salvação.", "T: Glória a Vós, Senhor!"]}, {"m": "homilia", "parte": "Evangelho", "t": "Homilia", "L": ["# Homilia"]}, {"m": "credo", "parte": "Credo", "t": "Profissão de fé (1 de 2)", "L": ["T: Creio em um só Deus, Pai Todo-Poderoso, Criador do Céu e da terra, de todas as coisas visíveis e invisíveis.", "Creio em um só Senhor, Jesus Cristo, Filho Unigénito de Deus, nascido do Pai antes de todos os séculos:", "Deus de Deus, Luz da Luz, Deus verdadeiro de Deus verdadeiro; gerado, não criado, consubstancial ao Pai. Por Ele todas as coisas foram feitas.", "E por nós, homens, e para nossa salvação desceu dos Céus. E encarnou pelo Espírito Santo, no seio da Virgem Maria, e Se fez homem."]}, {"m": "credo", "parte": "Credo", "t": "Profissão de fé (2 de 2)", "L": ["T: Também por nós foi crucificado sob Pôncio Pilatos; padeceu e foi sepultado.", "Ressuscitou ao terceiro dia, conforme as Escrituras; e subiu aos Céus, onde está sentado à direita do Pai.", "De novo há-de vir em sua glória, para julgar os vivos e os mortos; e o Seu Reino não terá fim.", "Creio no Espírito Santo, Senhor que dá a vida, e procede do Pai e do Filho e com o Pai e o Filho é adorado e glorificado. Ele que falou pelos Profetas.", "Creio na Igreja una, santa, católica e apostólica. Professo um só batismo para remissão dos pecados. E espero a ressurreição dos mortos, e a vida do mundo que há-de vir. Ámen."]}, {"m": "credo", "parte": "Oração universal", "t": "Oração universal", "L": ["# Oração universal", "R: A cada intenção respondemos:", "T: {universal}", "R: (ou outra resposta que o sacerdote indicar no início da oração)"]}, {"cantico": "ofertorio"}, {"m": "ofertorio", "parte": "Preparação dos dons", "t": "Pão e vinho", "L": ["S: Bendito sejais, Senhor, Deus do universo, pelo pão que recebemos da vossa bondade, fruto da terra e do trabalho do homem, que hoje Vos apresentamos e que para nós se vai tornar Pão da vida.", "T: Bendito seja Deus para sempre.", "", "S: Bendito sejais, Senhor, Deus do universo, pelo vinho que recebemos da vossa bondade, fruto da videira e do trabalho do homem, que hoje Vos apresentamos e que para nós se vai tornar Vinho da salvação.", "T: Bendito seja Deus para sempre."]}, {"m": "ofertorio", "parte": "Preparação dos dons", "t": "Orai, irmãos", "L": ["S: Orai, irmãos, para que o meu e vosso sacrifício seja aceite por Deus Pai todo-poderoso.", "T: Receba o Senhor por tuas mãos este sacrifício, para glória do seu nome, para nosso bem e de toda a santa Igreja.", "", "R: Oração sobre as oblatas", "S: … na unidade do Espírito Santo, por todos os séculos dos séculos.", "T: Ámen."]}, {"m": "eucaristica", "parte": "Oração eucarística", "t": "Prefácio", "L": ["S: O Senhor esteja convosco.", "T: Ele está no meio de nós.", "S: Corações ao alto.", "T: O nosso coração está em Deus.", "S: Dêmos graças ao Senhor, nosso Deus.", "T: É nosso dever, é nossa salvação.", "", "S: … Por isso, com os Anjos e os Santos, proclamamos a Vossa glória, cantando numa só voz:"]}, {"cantico": "santo"}, {"m": "eucaristica", "parte": "Mistério da fé", "t": "Consagração", "L": ["R: Consagração do pão e do vinho", "S: Eis o mistério da fé.", "R: (de pé)", "T: Anunciamos, Senhor, a Vossa morte, proclamamos a Vossa ressurreição. Vinde, Senhor Jesus!", "", "S: Por Cristo, com Cristo, em Cristo, a Vós, Deus Todo-Poderoso, toda a honra e toda a glória, agora e para sempre, na unidade do Espírito Santo, por todos os séculos dos séculos.", "T: Ámen."]}, {"m": "painosso", "parte": "Pai-Nosso", "t": "Pai-Nosso", "L": ["S: Rezemos, confiantes, a oração que o Senhor nos ensinou:", "T: Pai nosso, que estais nos céus,", "santificado seja o Vosso nome.", "Venha a nós o Vosso Reino.", "Seja feita a Vossa vontade, assim na Terra como no Céu.", "O pão nosso de cada dia nos dai hoje.", "Perdoai as nossas ofensas,", "assim como nós perdoamos a quem nos tem ofendido.", "E não nos deixeis cair em tentação, mas livrai-nos do mal."]}, {"m": "painosso", "parte": "Pai-Nosso", "t": "Paz", "L": ["S: Livrai-nos, Senhor, …", "T: Vosso é o Reino e o Poder e a Glória para sempre!", "S: Senhor Jesus Cristo, que dissestes aos Vossos Apóstolos …", "T: Ámen.", "", "S: A paz do Senhor esteja sempre convosco.", "T: O amor de Cristo nos uniu.", "S: Saudai-vos na paz de Cristo."]}, {"cantico": "cordeiro"}, {"m": "comunhao", "parte": "Convite à comunhão", "t": "Felizes os convidados", "L": ["S: Felizes os convidados para a Ceia do Senhor. Eis o Cordeiro de Deus, que tira o pecado do mundo.", "T: Senhor, eu não sou digno de que entreis em minha morada, mas dizei uma palavra e serei salvo."]}, {"cantico": "comunhao"}, {"m": "conclusao", "parte": "Ritos de conclusão", "t": "Bênção e despedida", "L": ["R: Oração depois da comunhão", "S: Oremos. …", "T: Ámen.", "S: O Senhor esteja convosco.", "T: Ele está no meio de nós.", "S: Abençoe-vos Deus Todo-Poderoso, Pai, Filho e Espírito Santo, por todos os séculos dos séculos.", "T: Ámen.", "S: Ide em paz e o Senhor vos acompanhe.", "T: Graças a Deus."]}, {"cantico": "final"}]};   // partes faladas e rezadas da missa + bloco "variavel" (missa-dados.json)
 const MOMENTS = [
   ["entrada","Entrada"],["penitencial","Ato penitencial"],["aleluia","Aclamação ao Evangelho"],
   ["ofertorio","Ofertório"],["santo","Santo"],["cordeiro","Cordeiro de Deus"],
   ["comunhao","Comunhão"],["final","Saída"]
 ];
 const PARISH = "Igreja de Nossa Senhora do Rosário de Fátima";
+const MAXL = 8;            // linhas de letra por diapositivo, no máximo
+/* Teclas 1…9: primeira parte do deck com esta paleta ("m"); 0 boas-vindas */
+const KEYS = {1:"entrada", 2:"inicio", 3:"gloria", 4:"palavra", 5:"credo", 6:"ofertorio", 7:"santo", 8:"painosso", 9:"conclusao"};
+/* Paletas que têm ilustração principal (mostrada à direita nos diapositivos curtos das partes da missa) */
+const FOCAL = new Set(["entrada","penitencial","aleluia","ofertorio","santo","cordeiro","comunhao","final","inicio","palavra","eucaristica","painosso","conclusao"]);
 
 /* ---------- Deteção de acordes (igual ao cancioneiro-template.html) ---------- */
 const CHORD = /^(DO|DÓ|RE|RÉ|MI|FA|FÁ|SOL|LA|LÁ|SI)(#|B)?(-|M(?!AJ))?(7M|MAJ7|7|9|4|SUS4)?$/i;
@@ -218,10 +257,10 @@ function songStanzas(song){
   }
   return st.map(s => (s.length === 1 && s[0].repeatFirst) ? st[0].map(l => ({...l})) : s);
 }
-/* Divide uma estrofe em diapositivos de 4 linhas no máximo, preferindo cortar depois de pontuação e nunca antes de um eco */
+/* Divide uma estrofe em diapositivos de MAXL linhas no máximo, preferindo cortar depois de pontuação e nunca antes de um eco */
 function splitStanza(st){
-  const n = st.length; if (n <= 4) return [st];
-  const k = Math.ceil(n/4), ends = /[.!?;:]$/;
+  const n = st.length; if (n <= MAXL) return [st];
+  const k = Math.ceil(n/MAXL), ends = /[.!?;:]$/;
   let best = null, bestScore = -Infinity;
   const evaluate = cuts => {
     let score = 0, prev = 0;
@@ -233,10 +272,10 @@ function splitStanza(st){
     if (score > bestScore){ bestScore = score; best = cuts; }
   };
   const rec = (start, left, cuts) => {
-    if (left === 1){ const size = n - start; if (size >= 1 && size <= 4) evaluate([...cuts, n]); return; }
-    for (let size = 1; size <= 4; size++){
+    if (left === 1){ const size = n - start; if (size >= 1 && size <= MAXL) evaluate([...cuts, n]); return; }
+    for (let size = 1; size <= MAXL; size++){
       const rest = n - (start + size);
-      if (rest < left - 1 || rest > 4 * (left - 1)) continue;
+      if (rest < left - 1 || rest > MAXL * (left - 1)) continue;
       rec(start + size, left - 1, [...cuts, start + size]);
     }
   };
@@ -246,53 +285,98 @@ function splitStanza(st){
   return out;
 }
 function norm(t){ return t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9 ]/g,"").replace(/\s+/g," ").trim(); }
-/* Refrão: diapositivo cuja 1.ª linha contém o título do cântico, ou cujo texto se repete noutro diapositivo */
-function markRefrains(song, slides){
+/* Diapositivos de um cântico: cada estrofe inteira num diapositivo; estrofes seguidas juntam-se no mesmo diapositivo
+   enquanto couberem em MAXL linhas. O refrão (1.ª linha com as palavras do título, ou estrofe repetida noutro sítio,
+   só em cânticos com 4+ estrofes) fica sempre sozinho, para levar a etiqueta. */
+function songSlides(song){
+  const stanzas = songStanzas(song);
   const tw = norm(song.t).split(" ").filter(w => w.length > 2);
-  const keys = slides.map(s => norm(s.lines.map(l => l.text).join(" ")));
-  slides.forEach((s, i) => {
-    const first = new Set(norm(s.lines[0].text).split(" "));
-    s.refrain = (tw.length > 0 && tw.every(w => first.has(w))) || keys.some((k, j) => j !== i && k === keys[i]);
+  const keys = stanzas.map(s => norm(s.map(l => l.text).join(" ")));
+  const isRef = stanzas.map((s, i) => stanzas.length >= 4 &&
+    ((tw.length > 0 && tw.every(w => norm(s[0].text).split(" ").includes(w))) || keys.some((k, j) => j !== i && k === keys[i])));
+  const slides = [], count = sl => sl.groups.reduce((a, g) => a + g.length, 0);
+  stanzas.forEach((st, i) => {
+    const parts = splitStanza(st), last = slides[slides.length - 1];
+    if (parts.length === 1 && !isRef[i] && last && !last.refrain && !last.split && count(last) + st.length <= MAXL) last.groups.push(st);
+    else parts.forEach(lines => slides.push({groups: [lines], refrain: isRef[i], split: parts.length > 1}));
   });
+  return slides;
 }
 
-/* ---------- Estrutura do deck ---------- */
+/* Linhas das partes da missa: "S: " sacerdote, "T: " todos, "R: " rubrica, "# " título, "" espaço; sem prefixo continua quem falava */
+function riteParts(L){
+  const out = []; let who = "T";
+  for (const raw of L){
+    const s = String(raw).replace(/\{(\w+)\}/g, (m, k) => MISSA.variavel[k] !== undefined ? MISSA.variavel[k] : m).trim();
+    if (!s){ out.push({k:"gap"}); continue; }
+    let m;
+    if ((m = s.match(/^#\s*(.*)$/))) out.push({k:"h", t:m[1]});
+    else if ((m = s.match(/^R:\s*(.*)$/))) out.push({k:"r", t:m[1]});
+    else if ((m = s.match(/^([ST]):\s*(.*)$/))){ who = m[1]; out.push({k:who, t:m[2], label:true}); }
+    else out.push({k:who, t:s});
+  }
+  return out;
+}
+/* Disposição: só título -> centrado; texto curto e paleta com ilustração -> texto à esquerda e ilustração à direita; senão toda a largura */
+function riteLayout(parts, m){
+  const spoken = parts.filter(p => p.k === "S" || p.k === "T");
+  if (!spoken.length) return "center";
+  const chars = spoken.reduce((a, p) => a + p.t.length, 0);
+  return chars <= 330 && FOCAL.has(m) ? "side" : "wide";
+}
+
+/* ---------- Estrutura do deck: segue a ordem de MISSA.missa, com os cânticos nos pontos {"cantico": momento} ---------- */
 const deck = [{type:"open", m:"open"}];
-const momentStart = [];
-MOMENTS.forEach(([id, label], mi) => {
-  SONGS.filter(s => s.m === id).forEach(song => {
-    const stanzas = songStanzas(song), slides = [];
-    stanzas.forEach(st => splitStanza(st).forEach(lines => slides.push({lines})));
-    if (stanzas.length >= 4) markRefrains(song, slides);
-    if (momentStart[mi] === undefined) momentStart[mi] = deck.length;
-    deck.push({type:"title", m:id, label, song, mi});
-    slides.forEach((sl, i) => deck.push({type:"lyric", m:id, label, song, mi, lines: sl.lines, refrain: !!sl.refrain, k: i, total: slides.length}));
-  });
+const ITEMS = [{l:"Bem-vindos", s:"Início", i:0, m:"open"}];   // entradas do menu (uma por cântico e por parte da missa)
+const used = new Set();
+function addSong(id, label, song){
+  ITEMS.push({l:label, s:song.t, i:deck.length, m:id, song:true});
+  songSlides(song).forEach((sl, k, all) => deck.push({type:"lyric", m:id, label, song, groups: sl.groups, refrain: sl.refrain, k, total: all.length}));
+  used.add(song);
+}
+MISSA.missa.forEach(e => {
+  if (e.cantico){
+    const mom = MOMENTS.find(([id]) => id === e.cantico);
+    if (mom) SONGS.filter(s => s.m === e.cantico).forEach(song => addSong(mom[0], mom[1], song));
+    return;
+  }
+  const parts = riteParts(e.L || []), prev = ITEMS[ITEMS.length - 1];
+  if (!prev || prev.l !== e.parte || prev.song) ITEMS.push({l:e.parte, s:e.t, i:deck.length, m:e.m});
+  deck.push({type:"rite", m:e.m, parte:e.parte, label:e.t, parts, layout: riteLayout(parts, e.m)});
 });
-const closeIdx = deck.length; deck.push({type:"close", m:"close"});
-const pauseIdx = deck.length; deck.push({type:"pause", m:"pause"});
+SONGS.filter(s => !used.has(s)).forEach(song => { const mom = MOMENTS.find(([id]) => id === song.m); addSong(song.m, mom ? mom[1] : song.m, song); });   // cânticos sem lugar na ordem: no fim
+const closeIdx = deck.length; deck.push({type:"close", m:"close"}); ITEMS.push({l:"Ide em paz", s:"Despedida", i:closeIdx, m:"close"});
+const pauseIdx = deck.length; deck.push({type:"pause", m:"pause"}); ITEMS.push({l:"Pausa", s:"Fundo neutro", i:pauseIdx, m:"pause", k:"P"});
 const N = deck.length;
+ITEMS[0].k = "0";
+for (const [k, m] of Object.entries(KEYS)){ const it = ITEMS.find(x => x.m === m && !x.k); if (it) it.k = k; }
 
 function lyricHTML(d){
-  const lines = d.lines.map((l, i) =>
-    `<p class="ln${l.echo ? " echo" : ""}" style="--d:${i}">${esc(l.text)}${l.times ? `<span class="x2">×${l.times}</span>` : ""}</p>`).join("");
-  return `<div class="lyr${d.refrain ? " refrain" : ""}">${d.refrain ? '<div class="tag">Refrão</div>' : ""}${lines}</div>
+  let n = 0;
+  const groups = d.groups.map(g => `<div class="st">` + g.map(l =>
+    `<p class="ln${l.echo ? " echo" : ""}" style="--d:${n++}">${esc(l.text)}${l.times ? `<span class="x2">×${l.times}</span>` : ""}</p>`).join("") + `</div>`).join("");
+  return `<div class="lyr fit${d.refrain ? " refrain" : ""}"><div class="in">${d.refrain ? '<div class="tag">Refrão</div>' : ""}${groups}</div></div>
     <div class="crumb"><i></i><b>${esc(d.label)}</b><span>${esc(d.song.t)}</span></div>`;
 }
-function titleHTML(d){
-  const h1 = d.label.length > 14 ? 118 : d.label.length > 8 ? 142 : 176;
-  const sub = [d.song.sub, d.song.a].filter(Boolean).join(" · ");
-  return `<div class="tt" style="--h1:${h1}px"><div class="eb">Vamos cantar</div><h1>${esc(d.label)}</h1><div class="rule"></div><h2>${esc(d.song.t)}</h2>${sub ? `<div class="sb">${esc(sub)}</div>` : ""}</div>`;
+function riteHTML(d){
+  const rows = d.parts.map((p, i) => {
+    if (p.k === "gap") return `<div class="gap"></div>`;
+    if (p.k === "h") return `<h2 class="rh" style="--d:${i}">${esc(p.t)}</h2>`;
+    if (p.k === "r") return `<p class="rr" style="--d:${i}">${esc(p.t)}</p>`;
+    return `<div class="row ${p.k}" style="--d:${i}"><span class="who">${p.label ? (p.k === "S" ? "Sacerdote" : "Todos") : ""}</span><p>${esc(p.t)}</p></div>`;
+  }).join("");
+  return `<div class="rite fit ${d.layout}"><div class="in">${rows}</div></div>
+    <div class="crumb"><i></i><b>${esc(d.parte)}</b><span>${esc(d.label)}</span></div>`;
 }
 const FIXED = {
-  open:  `<div class="tt"><div class="eb">${PARISH}</div><h1>Bem-vindos</h1><div class="rule"></div><h2>Póvoa de Santa Iria</h2><div class="sb">Cantemos juntos a nossa missa</div></div>`,
+  open:  `<div class="tt"><div class="eb">${PARISH}</div><h1>Bem-vindos</h1><div class="rule"></div><h2>${esc(MISSA.variavel.domingo || "Póvoa de Santa Iria")}</h2><div class="sb">Póvoa de Santa Iria · Cantemos juntos a nossa missa</div></div>`,
   close: `<div class="tt"><div class="eb">${PARISH}</div><h1>Ide em paz</h1><div class="rule"></div><h2>e o Senhor vos acompanhe.</h2><div class="sb">Obrigado por cantarem connosco</div></div>`,
   pause: `<div class="tt"><div class="eb">${PARISH}</div><div class="rule"></div><h2>Póvoa de Santa Iria</h2></div>`
 };
 function slideHTML(d, i){
-  const inner = d.type === "lyric" ? lyricHTML(d) : d.type === "title" ? titleHTML(d) : FIXED[d.type];
-  const art = ART[d.m] ? ART[d.m]("a" + i, d.type) : "";
-  return `<section class="slide m-${d.m} t-${d.type}" id="s${i}"><div class="bg">${art}</div><div class="veil"></div>${inner}</section>`;
+  const inner = d.type === "lyric" ? lyricHTML(d) : d.type === "rite" ? riteHTML(d) : FIXED[d.type];
+  const art = ART[d.m] ? ART[d.m]("a" + i, d.type === "rite" ? d.layout : d.type) : "";
+  return `<section class="slide m-${d.m} t-${d.type}${d.layout ? " l-" + d.layout : ""}" id="s${i}"><div class="bg">${art}</div><div class="veil"></div>${inner}</section>`;
 }
 
 /* ---------- Navegação ---------- */
@@ -301,12 +385,21 @@ const $ = id => document.getElementById(id);
 const stage = $("stage"), slidesEl = $("slides"), bar = $("bar"), num = $("num"), hint = $("hint"), menu = $("menu"), black = $("black"), white = $("white");
 let els = [];
 
+/* Ajuste automático do tamanho da letra: primeiro à largura (linhas de letra não quebram), depois à altura da caixa.
+   Mínimos: 50px na letra dos cânticos, 44px no texto do povo nas partes da missa (o sacerdote fica a 70% disso). */
 function fitText(el){
-  const box = el.querySelector(".lyr"); if (!box || box.dataset.fit) return;
+  const box = el.querySelector(".fit"); if (!box || box.dataset.fit) return;
   box.dataset.fit = "1";
-  const W = box.clientWidth; let r = 1;
+  const lyric = box.classList.contains("lyr"), base = lyric ? 78 : 54, min = lyric ? 50 : 44;
+  const inner = box.querySelector(".in"), W = box.clientWidth, H = box.clientHeight;
+  let fs = base, r = 1;
   box.querySelectorAll(".ln").forEach(l => { r = Math.max(r, l.scrollWidth / W); });
-  if (r > 1.001) box.style.setProperty("--fs", Math.max(50, Math.floor(78 / r * 0.98)) + "px");
+  if (r > 1.001) fs = Math.max(min, Math.floor(base / r * 0.98));
+  box.style.setProperty("--fs", fs + "px");
+  for (let i = 0; i < 10 && inner.offsetHeight > H && fs > min; i++){
+    fs = Math.max(min, Math.floor(fs * Math.min(.96, H / inner.offsetHeight)));
+    box.style.setProperty("--fs", fs + "px");
+  }
 }
 function go(i){
   i = Math.max(0, Math.min(N-1, i|0)); if (i === cur) return;
@@ -321,16 +414,12 @@ function go(i){
   if (location.hash !== "#" + (i+1)) history.replaceState(null, "", "#" + (i+1));
   [...menu.querySelectorAll("button")].forEach(b => b.classList.toggle("cur", +b.dataset.go === momentOf(i)));
 }
-function momentOf(i){ let m = -1; momentStart.forEach((s, k) => { if (s !== undefined && i >= s) m = s; }); return i >= closeIdx ? i : (i === 0 ? 0 : m); }
+function momentOf(i){ let m = 0; ITEMS.forEach(it => { if (i >= it.i) m = it.i; }); return m; }
 const next = () => go(cur + 1), prevS = () => go(cur - 1);
 function toggle(el, on){ el.classList.toggle("on", on === undefined ? !el.classList.contains("on") : on); }
 function closeCovers(){ [black, white, menu].forEach(e => e.classList.remove("on")); }
 function togglePause(){ if (cur === pauseIdx) go(beforePause); else { beforePause = cur; go(pauseIdx); } }
-function jumpKey(n){
-  if (n === 0) return go(0);
-  if (n === 9) return go(closeIdx);
-  if (momentStart[n-1] !== undefined) go(momentStart[n-1]);
-}
+function jumpKey(n){ const it = ITEMS.find(x => x.k === String(n)); if (it) go(it.i); }
 function fullscreen(){
   const d = document;
   if (d.fullscreenElement) d.exitFullscreen && d.exitFullscreen();
@@ -341,15 +430,8 @@ function fitStage(){
   stage.style.transform = `translate(-50%,-50%) scale(${s})`;
 }
 function buildMenu(){
-  const items = [["0","Bem-vindos","Início", 0]];
-  MOMENTS.forEach(([id, label], mi) => {
-    if (momentStart[mi] === undefined) return;
-    const song = SONGS.find(s => s.m === id);
-    items.push([String(mi+1), label, song ? song.t : "", momentStart[mi]]);
-  });
-  items.push(["9","Ide em paz","Despedida", closeIdx], ["P","Pausa","Fundo neutro", pauseIdx]);
-  menu.querySelector(".grid").innerHTML = items.map(([k, l, s, i]) =>
-    `<button type="button" data-go="${i}"><kbd>${k}</kbd><span><div class="l">${esc(l)}</div><div class="s">${esc(s)}</div></span></button>`).join("");
+  menu.querySelector(".grid").innerHTML = ITEMS.map(it =>
+    `<button type="button" data-go="${it.i}"><kbd>${it.k || ""}</kbd><span><div class="l">${esc(it.l)}</div><div class="s">${esc(it.s)}</div></span></button>`).join("");
   menu.addEventListener("click", e => {
     const b = e.target.closest("button[data-go]");
     if (b){ go(+b.dataset.go); toggle(menu, false); }
@@ -399,7 +481,7 @@ function init(){
     cursorT = setTimeout(() => document.body.classList.add("nocursor"), 2500);
   });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => {
-    document.querySelectorAll(".lyr").forEach(b => { delete b.dataset.fit; b.style.removeProperty("--fs"); });
+    document.querySelectorAll(".fit").forEach(b => { delete b.dataset.fit; b.style.removeProperty("--fs"); });
     if (cur >= 0) fitText(els[cur]);
   });
 }
@@ -456,7 +538,7 @@ function ambFinal(p, r, big){ let s = starsField(r, 40, 520, "#fff") + cloud(220
   return s; }
 
 /* Ilustrações principais dos diapositivos de título */
-function focalEntrada(p, r){
+function focalEntrada(p, r, heart = true){
   const x = 1430, y = 230, w = 320, h = 620, R = w / 2;
   let s = `<defs>${radial(p + "dl", "#ffe9a8", .95, .5, true)}<linearGradient id="${p}pl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9a8" stop-opacity=".55"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></linearGradient></defs>`;
   s += `<ellipse cx="${x + R}" cy="${y + h * .5}" rx="${w * 2.3}" ry="${h * 1.05}" fill="url(#${p}dl)" class="pulse" style="--dur:6s"/>`;
@@ -467,7 +549,7 @@ function focalEntrada(p, r){
   s += `<g class="leafR"><path d="M${x + w} ${y + h} V${y + R} A${R} ${R} 0 0 0 ${x + R} ${y} V${y + h} Z" fill="#6b4719" stroke="#3d2708" stroke-width="4"/><circle cx="${x + R + 34}" cy="${y + h / 2 + 40}" r="9" fill="#e8c877"/></g>`;
   s += `<path d="M${x - 28} ${y + h + 16} V${y + R} A${R + 28} ${R + 28} 0 0 1 ${x + w + 28} ${y + R} V${y + h + 16} H${x + w} V${y + R} A${R} ${R} 0 0 0 ${x} ${y + R} V${y + h + 16} Z" fill="#2b4f8f" stroke="var(--goldl)" stroke-width="6"/>`;
   s += `<rect x="${x - 60}" y="${y + h + 16}" width="${w + 120}" height="22" rx="6" fill="#2b4f8f" stroke="var(--goldl)" stroke-width="4"/>`;
-  s += `<g transform="translate(${x + R} ${y - 95})"><circle r="150" fill="url(#${p}dl)" class="glow" style="--dur:3s"/><g class="beat"><path d="${HEART}" transform="scale(7.5)" fill="#ff6f93"/><path d="${HEART}" transform="translate(-10 -12) scale(5.2)" fill="#fff" opacity=".2"/></g></g>`;
+  if (heart) s += `<g transform="translate(${x + R} ${y - 95})"><circle r="150" fill="url(#${p}dl)" class="glow" style="--dur:3s"/><g class="beat"><path d="${HEART}" transform="scale(7.5)" fill="#ff6f93"/><path d="${HEART}" transform="translate(-10 -12) scale(5.2)" fill="#fff" opacity=".2"/></g></g>`;
   const people = [[400, 1050, 1.3, "#ffd27a"], [585, 1020, 1.1, "#8fc1ff"], [750, 990, .95, "#ffb3b3"], [895, 965, .82, "#c8f0c0"], [1020, 945, .72, "#ffe6a8"], [1130, 928, .62, "#d9c1ff"], [1230, 915, .54, "#ffd27a"]];
   people.forEach(([px, py, sc, col], i) => { s += `<g transform="translate(${px} ${py}) scale(${sc})"><g class="walk" style="animation-delay:${-i * 4}s"><g class="bob" style="--dl:${f1(-i * .33)}s">${person(col)}</g></g></g>`; });
   return s;
@@ -550,15 +632,58 @@ function rosary(p, r, op){
   return s + "</g></g>";
 }
 
+/* Partes da missa: ambientes sóbrios e ilustrações principais (mostradas só na disposição "side") */
+function calmStars(r, n, maxY){ let s = ""; for (let i = 0; i < n; i++){ const R = 1.2 + r() * 2.8, dur = 8 + r() * 9;   // estrelas firmes, a pulsar devagar
+  s += `<circle class="twinkle" style="--dur:${f1(dur)}s;--dl:${f1(-r()*dur)}s" cx="${(r()*1920)|0}" cy="${(r()*maxY)|0}" r="${f1(R)}" fill="#fff"/>`; } return s; }
+function ambInicio(p, r){ return `<defs>${radial(p + "ig", "#f0d48a", .3, .12, true)}</defs>` + starsField(r, 70, 1080) + `<circle cx="1500" cy="260" r="620" fill="url(#${p}ig)" class="pulse" style="--dur:8s"/>`; }
+function ambGloria(p, r){ return `<defs>${radial(p + "gg", "#fff1b8", .75, .3, true)}</defs><circle cx="960" cy="-140" r="820" fill="url(#${p}gg)" class="pulse" style="--dur:7s"/>` +
+  rays(960, -160, 28, 2700, .03, "#fff0b8", .09, 150) + sparkles(r, 24, 0, 1920, 0, 1080, 18, "#fff3c4") + cloud(300, 900, 1.2, .1, 90, -20) + cloud(1500, 960, 1, .09, 110, -60); }
+function lightMotes(r, n, x0, x1, col){ let s = ""; for (let i = 0; i < n; i++){ const dur = 16 + r() * 10;   // pontos de luz a subir devagar
+  s += `<g transform="translate(${(x0 + r()*(x1-x0))|0} 1110)"><g class="rise" style="--dur:${f1(dur)}s;--dl:${f1(-r()*dur)}s"><path d="${sparkle(12)}" fill="${col}" opacity=".5"/></g></g>`; } return s; }
+function ambPalavra(p, r){ return `<defs>${radial(p + "pg", "#ffe3a0", .45, .18, true)}</defs><circle cx="1500" cy="760" r="640" fill="url(#${p}pg)" class="pulse" style="--dur:7s"/>` + sparkles(r, 14, 0, 1920, 0, 1080, 14, "#ffe9b0") + lightMotes(r, 10, 0, 1920, "#ffe9b0"); }
+function focalPalavra(p, r){
+  const book = `M-300 -20 Q-150 -62 0 -10 Q150 -62 300 -20 L300 150 Q150 108 0 160 Q-150 108 -300 150 Z`;
+  let s = rays(1500, 690, 18, 2200, .03, "#fff0b8", .12, 90) + `<g transform="translate(1500 720) scale(1.25)"><path d="${book}" fill="#3a1a08" opacity=".35" transform="translate(0 16)"/><path d="${book}" fill="#fff8e6"/><path d="M0 -10 V160" stroke="#d9b76a" stroke-width="6"/><path d="M-300 -20 Q-150 -62 0 -10 Q150 -62 300 -20" fill="none" stroke="#b98f42" stroke-width="8" stroke-linejoin="round"/>`;
+  for (let i = 0; i < 4; i++){ const y = 30 + i * 28; s += `<path d="M-256 ${y} Q-150 ${y - 14} -40 ${y}" stroke="#cdbb8f" stroke-width="6" stroke-linecap="round" fill="none"/><path d="M40 ${y} Q150 ${y - 14} 256 ${y}" stroke="#cdbb8f" stroke-width="6" stroke-linecap="round" fill="none"/>`; }
+  s += `<path d="M-24 -40 h48 v-70 h-48 Z" fill="#b22a3a" opacity=".9"/></g>`;   // fita marcadora
+  return s + lightMotes(r, 14, 1200, 1800, "#fff3c4"); }
+function ambHomilia(p, r){ return `<defs>${radial(p + "hg", "#d9c48a", .22, .08, true)}</defs>` + calmStars(r, 60, 1080) + `<circle cx="960" cy="540" r="700" fill="url(#${p}hg)" class="pulse" style="--dur:9s"/>`; }
+function ambCredo(p, r){
+  let s = `<defs>${radial(p + "cg", "#dfe8ff", .3, .1, true)}<linearGradient id="${p}cv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="${p}ch" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>`;
+  s += calmStars(r, 130, 1080) + `<circle cx="1560" cy="420" r="560" fill="url(#${p}cg)" class="pulse" style="--dur:10s"/>`;
+  s += `<g class="glow" style="--dur:9s"><rect x="1538" y="-80" width="44" height="1240" fill="url(#${p}cv)" opacity=".22"/><rect x="1120" y="298" width="880" height="44" fill="url(#${p}ch)" opacity=".22"/></g>`;   // cruz de luz
+  return s; }
+function ambEucar(p, r){ return `<defs>${radial(p + "eg", "#ffc070", .45, .18, true)}</defs><circle cx="960" cy="640" r="720" fill="url(#${p}eg)" class="pulse" style="--dur:7s"/>` + lightMotes(r, 14, 0, 1920, "#ffe3b0") + sparkles(r, 10, 0, 1920, 0, 1080, 14, "#ffe9c0"); }
+function focalEucar(p, r){
+  let s = `<defs>${radial(p + "ch", "#fff1c8", .9, .45, true)}</defs><g transform="translate(1500 660)"><circle cy="-220" r="470" fill="url(#${p}ch)" class="pulse" style="--dur:6s"/>${rays(0, -420, 16, 560, .04, "#fff3d0", .24, 90)}`;
+  s += `<g class="glow" style="--dur:4s"><g transform="translate(0 -420)"><circle r="96" fill="#fff8e6"/><circle r="96" fill="none" stroke="#e8c877" stroke-width="7"/><path d="M0 -52 V52 M-52 0 H52" stroke="#d9b76a" stroke-width="11" stroke-linecap="round"/></g></g>`;   // hóstia
+  s += `<g transform="scale(1.9)"><path d="M-74 -170 Q-74 -70 0 -44 Q74 -70 74 -170 Z" fill="#f0d48a"/><path d="M-66 -170 H66 Q66 -134 0 -108 Q-66 -134 -66 -170Z" fill="#8a1f3a"/><rect x="-11" y="-46" width="22" height="56" fill="#d9b76a"/><ellipse cx="0" cy="10" rx="58" ry="12" fill="#d9b76a"/><path d="M-50 -150 Q-54 -100 -20 -70" stroke="#fff" stroke-width="5" fill="none" opacity=".5" stroke-linecap="round"/></g></g>`;   // cálice
+  return s + sparkles(r, 12, 1200, 1800, 120, 900, 20, "#fff6d0"); }
+function ambPainosso(p, r){ return `<defs>${radial(p + "dg", "#ffe2a0", .5, .2, true)}</defs>` + calmStars(r, 40, 500) + `<circle cx="960" cy="1180" r="760" fill="url(#${p}dg)" class="pulse" style="--dur:8s"/>` +
+  rays(960, 1240, 22, 2200, .03, "#ffe9b0", .08, 160) + cloud(260, 820, 1.1, .14, 80, -20) + cloud(1300, 900, .9, .12, 100, -50); }
+function focalPaz(p, r){
+  return `<defs>${radial(p + "pz", "#ffffff", .5, .18, true)}</defs><circle cx="1500" cy="520" r="420" fill="url(#${p}pz)" class="pulse" style="--dur:6s"/>` + cloud(1200, 760, 1.2, .22, 70, -20) + cloud(1700, 300, .9, .18, 90, -50) +
+    `<g transform="translate(1440 520)"><g class="float" style="--dur:6s">${dove(5.2)}<g transform="translate(180 -14) scale(4.2)"><path d="M0 0 Q16 -10 34 -2" stroke="#5aa55c" stroke-width="3" fill="none"/><ellipse cx="10" cy="-8" rx="7" ry="3.5" transform="rotate(-30 10 -8)" fill="#6cc073"/><ellipse cx="22" cy="-9" rx="7" ry="3.5" transform="rotate(-20 22 -9)" fill="#6cc073"/><ellipse cx="16" cy="1" rx="7" ry="3.5" transform="rotate(20 16 1)" fill="#5aa55c"/></g></g></g>` +
+    sparkles(r, 12, 1150, 1850, 160, 900, 18, "#fff"); }
+function ambConclusao(r){ return calmStars(r, 50, 620) + cloud(240, 260, 1.2, .22, 80, -30) + cloud(1000, 160, .9, .18, 100, -60); }
+
 const ART = {
-  entrada:     (p, t) => { const r = rng(11); return SVG(ambEntrada(r, t === "title" ? 18 : 14) + (t === "title" ? focalEntrada(p, r) : "")); },
-  penitencial: (p, t) => { const r = rng(22); return SVG(ambPenit(r) + (t === "title" ? focalPenit(p, r) : "")); },
-  aleluia:     (p, t) => { const r = rng(33); return SVG(ambAleluia(r) + (t === "title" ? focalAleluia(p, r) : "")); },
-  ofertorio:   (p, t) => { const r = rng(44); return SVG(ambOfertGlow(p) + (t === "title" ? focalOfert(p, r) + wheatRow(r, true) : wheatRow(r, false))); },
-  santo:       (p, t) => { const r = rng(55); return SVG(ambSanto(r, t === "title") + (t === "title" ? focalSanto(p, r) : "")); },
-  cordeiro:    (p, t) => { const r = rng(66); return SVG((t === "title" ? "" : ambCordeiro(r)) + (t === "title" ? cloud(300, 180, 1.1, .25, 70, -20) + cloud(1000, 120, .8, .2, 90, -50) + focalCordeiro(p, r) : "")); },
-  comunhao:    (p, t) => { const r = rng(77); return SVG(ambComunhao(p, r) + (t === "title" ? focalComunhao(p, r) : "")); },
-  final:       (p, t) => { const r = rng(88); return SVG(ambFinal(p, r, t === "title") + (t === "title" ? focalFinal(p, r) : "")); },
+  entrada:     (p, t) => { const r = rng(11); return SVG(ambEntrada(r, t === "side" ? 18 : 14) + (t === "side" ? focalEntrada(p, r) : "")); },
+  penitencial: (p, t) => { const r = rng(22); return SVG(ambPenit(r) + (t === "side" ? focalPenit(p, r) : "")); },
+  aleluia:     (p, t) => { const r = rng(33); return SVG(ambAleluia(r) + (t === "side" ? focalAleluia(p, r) : "")); },
+  ofertorio:   (p, t) => { const r = rng(44); return SVG(ambOfertGlow(p) + (t === "side" ? focalOfert(p, r) + wheatRow(r, true) : wheatRow(r, false))); },
+  santo:       (p, t) => { const r = rng(55); return SVG(ambSanto(r, t === "side") + (t === "side" ? focalSanto(p, r) : "")); },
+  cordeiro:    (p, t) => { const r = rng(66); return SVG((t === "side" ? "" : ambCordeiro(r)) + (t === "side" ? cloud(300, 180, 1.1, .25, 70, -20) + cloud(1000, 120, .8, .2, 90, -50) + focalCordeiro(p, r) : "")); },
+  comunhao:    (p, t) => { const r = rng(77); return SVG(ambComunhao(p, r) + (t === "side" ? focalComunhao(p, r) : "")); },
+  final:       (p, t) => { const r = rng(88); return SVG(ambFinal(p, r, t === "side") + (t === "side" ? focalFinal(p, r) : "")); },
+  inicio:      (p, t) => { const r = rng(12); return SVG(t === "side" ? starsField(r, 70, 1080) + rosary(p, r, .8) : ambInicio(p, r)); },
+  gloria:      (p, t) => { const r = rng(23); return SVG(ambGloria(p, r)); },
+  palavra:     (p, t) => { const r = rng(34); return SVG(ambPalavra(p, r) + (t === "side" ? focalPalavra(p, r) : "")); },
+  homilia:     (p, t) => { const r = rng(45); return SVG(ambHomilia(p, r)); },
+  credo:       (p, t) => { const r = rng(56); return SVG(ambCredo(p, r)); },
+  eucaristica: (p, t) => { const r = rng(67); return SVG(ambEucar(p, r) + (t === "side" ? focalEucar(p, r) : "")); },
+  painosso:    (p, t) => { const r = rng(78); return SVG(ambPainosso(p, r) + (t === "side" ? focalPaz(p, r) : "")); },
+  conclusao:   (p, t) => { const r = rng(89); return SVG(ambConclusao(r) + (t === "side" ? focalEntrada(p, r, false) : "")); },
   open:        p => { const r = rng(99); return SVG(starsField(r, 70, 1080) + rosary(p, r, 1)); },
   pause:       p => { const r = rng(99); return SVG(starsField(r, 70, 1080) + rosary(p, r, .55)); },
   close:       p => { const r = rng(11); return SVG(ambEntrada(r, 18) + focalEntrada(p, r)); }
