@@ -206,6 +206,7 @@ html:has(body.has-player){scroll-padding-bottom:calc(var(--player-h,160px) + 16p
 @media (prefers-reduced-motion:no-preference){.player{animation:rise .25s ease-out}}
 @keyframes rise{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
 
+.vigor{margin:12px 0 0;font-family:var(--display);font-size:1.125rem;font-weight:600;color:var(--gold-ink)}
 .search{margin:24px auto 0;max-width:520px}
 .search input{width:100%;min-height:48px;padding:0 18px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:1rem}
 .search input::placeholder{color:var(--muted)}
@@ -235,6 +236,7 @@ footer p+p{margin-top:8px}
     <p class="eyebrow">Igreja de Nossa Senhora do Rosário de Fátima · Póvoa de Santa Iria</p>
     <div class="orn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2c.6 5.6 4.4 9.4 10 10-5.6.6-9.4 4.4-10 10-.6-5.6-4.4-9.4-10-10 5.6-.6 9.4-4.4 10-10z"/></svg></div>
     <h1>Arquivo de Cânticos</h1>
+    <p class="vigor atual-only" id="vigor" hidden></p>
     <p class="lead fieis-only atual-only">As letras dos cânticos que o coro canta na nossa igreja, para acompanhar a celebração no telemóvel. Toque em Ouvir para escutar a gravação do coro.</p>
     <p class="lead musico-only atual-only">Folhas de acordes para o coro e os músicos: acordes de guitarra, mudança de tom e a gravação do coro da paróquia, quando existe.</p>
     <p class="lead arquivo-only">Os cânticos que o coro já cantou na nossa igreja e que agora não estão em uso. Ficam aqui para consulta, com a letra, os acordes e a gravação do coro, quando existe.</p>
@@ -494,7 +496,7 @@ function build(){
     if (!ARQ) {
       const fut = s => (s.desde || "") > HOJE;
       list.sort((a, b) => (fut(a[0]) - fut(b[0])) || (fut(a[0]) ? (a[0].desde > b[0].desde ? 1 : -1) : ((b[0].desde || "") > (a[0].desde || "") ? 1 : -1)));
-      list.forEach(([s, i], k) => { tags[i] = fut(s) ? "A partir de " + fmtData(s.desde, false) : (k > 0 ? "Outra opção" : ""); });
+      list.forEach(([s, i], k) => { tags[i] = !fut(s) && k > 0 ? "Outra opção" : ""; });
     }
     return `<section class="moment" id="${id}" aria-labelledby="h-${id}"><h2 id="h-${id}">${STAR}<span>${label}</span></h2>` +
       list.map(([s, i]) => songCard(s, i, tags[i])).join("") + "</section>";
@@ -748,8 +750,18 @@ function filtrar(){
   measureBar(); navEnd(); spy();
 }
 
+/* ---------- Data do cancioneiro: a entrada do cântico mais recente («A partir de 1 de novembro de 2026», depois «Desde …») ---------- */
+function vigor(){
+  const d = SONGS.map(s => s.desde || "").sort().pop();
+  if (ARQ || !d) return;
+  const el = document.getElementById("vigor");
+  el.textContent = (d > HOJE ? "A partir de " : "Desde ") + fmtData(d, true);
+  el.hidden = false;
+}
+
 /* ---------- Arranque ---------- */
 build();
+vigor();
 sections = Array.from(document.querySelectorAll("section.moment"));
 links = Array.from(nav.querySelectorAll("a"));
 setNotation(notation);
