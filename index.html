@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-PT">
+<html lang="pt-PT" data-view="atual">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -55,6 +55,10 @@ html[data-mode="musico"] .wrap{max-width:860px}
 /* Modos: o HTML tem as duas leituras; o CSS mostra uma de cada vez */
 html[data-mode="musico"] .fieis-only{display:none!important}
 html:not([data-mode="musico"]) .musico-only{display:none!important}
+/* Vistas: cânticos em uso (atual) e arquivo dos cânticos anteriores, geradas do mesmo modelo */
+html[data-view="arquivo"] .atual-only{display:none!important}
+html:not([data-view="arquivo"]) .arquivo-only{display:none!important}
+.moments a[hidden],.moment[hidden],.song[hidden]{display:none}
 
 /* Cabeçalho */
 .top{text-align:center}
@@ -201,6 +205,18 @@ html:has(body.has-player){scroll-padding-bottom:calc(var(--player-h,160px) + 16p
 @media (prefers-reduced-motion:no-preference){.player{animation:rise .25s ease-out}}
 @keyframes rise{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
 
+.search{margin:24px auto 0;max-width:520px}
+.search input{width:100%;min-height:48px;padding:0 18px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:1rem}
+.search input::placeholder{color:var(--muted)}
+.search input:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.found{margin:8px 0 0;font-size:.875rem;color:var(--muted)}
+.when{margin:8px 0 0;font-size:.875rem;color:var(--gold-ink)}
+.more{margin-top:12px}
+.more>summary{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--blue);font-size:.875rem;font-weight:500;cursor:pointer;list-style:none}
+.more>summary::-webkit-details-marker{display:none}
+.more>summary::before{content:"+";margin-right:8px;font-family:var(--mono);font-weight:600}
+.more[open]>summary::before{content:"−"}
+.more>summary:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:.875rem;line-height:1.6}
 footer .orn{margin:0 0 16px}
 footer p{margin:0 auto;max-width:60ch}
@@ -218,8 +234,11 @@ footer p+p{margin-top:8px}
     <p class="eyebrow">Igreja de Nossa Senhora do Rosário de Fátima · Póvoa de Santa Iria</p>
     <div class="orn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2c.6 5.6 4.4 9.4 10 10-5.6.6-9.4 4.4-10 10-.6-5.6-4.4-9.4-10-10 5.6-.6 9.4-4.4 10-10z"/></svg></div>
     <h1>Cânticos da Missa</h1>
-    <p class="lead fieis-only">As letras dos cânticos que o coro canta na nossa igreja, para acompanhar a celebração no telemóvel. Toque em Ouvir para escutar a gravação do coro.</p>
-    <p class="lead musico-only">Folhas de acordes para o coro e os músicos: acordes de guitarra, mudança de tom e a gravação do coro da paróquia (missa de 18 de outubro de 2026) para cada cântico.</p>
+    <p class="lead fieis-only atual-only">As letras dos cânticos que o coro canta na nossa igreja, para acompanhar a celebração no telemóvel. Toque em Ouvir para escutar a gravação do coro.</p>
+    <p class="lead musico-only atual-only">Folhas de acordes para o coro e os músicos: acordes de guitarra, mudança de tom e a gravação do coro da paróquia, quando existe.</p>
+    <p class="lead arquivo-only">Os cânticos que o coro já cantou na nossa igreja e que agora não estão em uso. Ficam aqui para consulta, com a letra, os acordes e a gravação do coro, quando existe.</p>
+    <p class="links atual-only"><a href="arquivo.html">Arquivo dos cânticos anteriores</a></p>
+    <p class="links arquivo-only"><a href="cancioneiro-coro.html">Voltar aos cânticos em uso</a></p>
     <div class="tools" role="group" aria-label="Opções de leitura">
       <span class="seg" role="group" aria-label="Tamanho da letra">
         <button type="button" id="fs-dec" aria-label="Diminuir a letra">A−</button>
@@ -238,6 +257,10 @@ footer p+p{margin-top:8px}
         <button type="button" id="n-us" aria-pressed="false">C D E</button>
       </span>
     </div>
+    <div class="search arquivo-only">
+      <input type="search" id="q" placeholder="Procurar por título, autor ou palavra da letra" aria-label="Procurar no arquivo" autocomplete="off">
+      <p class="found" id="found" aria-live="polite"></p>
+    </div>
     <p class="sr" id="fs-live" aria-live="polite"></p>
   </header>
 
@@ -249,8 +272,10 @@ footer p+p{margin-top:8px}
 
   <footer>
     <div class="orn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2c.6 5.6 4.4 9.4 10 10-5.6.6-9.4 4.4-10 10-.6-5.6-4.4-9.4-10-10 5.6-.6 9.4-4.4 10-10z"/></svg></div>
-    <p>Cânticos do coro da Igreja de Nossa Senhora do Rosário de Fátima, Póvoa de Santa Iria. Fonte: documento «Cantos Igreja Nossa Senhora de Fátima».</p>
-    <p>A divisão por momentos da missa é uma proposta e pode ser revista pelo coro. As gravações são do coro da paróquia, feitas na missa de 18 de outubro de 2026, e servem de referência para a melodia.</p>
+    <p>Cânticos do coro da Igreja de Nossa Senhora do Rosário de Fátima, Póvoa de Santa Iria. Fontes: documento «Cantos Igreja Nossa Senhora de Fátima» e cancioneiro Verbum Dei Lisboa.</p>
+    <p>A divisão por momentos da missa é uma proposta e pode ser revista pelo coro. As gravações são do coro da paróquia, feitas nas missas, e servem de referência para a melodia.</p>
+    <p class="links atual-only"><a href="arquivo.html">Arquivo dos cânticos anteriores</a></p>
+    <p class="links arquivo-only"><a href="cancioneiro-coro.html">Voltar aos cânticos em uso</a></p>
   </footer>
 </div>
 
@@ -287,13 +312,29 @@ footer p+p{margin-top:8px}
 </div>
 
 <script>
-const SONGS = [{"m": "entrada", "n": "1.1", "t": "Vós todos sereis", "a": null, "yt": "https://www.youtube.com/watch?v=bG-9kHlIuEQ", "ytl": "Coro Clavis Dei", "q": "Vós todos sereis meu povo", "L": ["DÓ          SOL       LÁ-  MI-", "Vós todos sereis o Meu povo.", "   FÁ                            SOL", "Eu sempre serei vosso Deus;", "      DÓ      SOL     LÁ-  MI-", "Dar-vos-ei um coração novo", "    FÁ                        SOL       DÓ", "E infundirei o meu Espírito de Amor (2)", "", "DÓ                                MI-           FÁ", "Será um coração sem fronteiras,", "FÁ                              SOL", "onde todos tenham um lugar;", "DÓ                  MI-", "onde a única linguagem", "FÁ                    SOL", "seja o amor e a unidade.", "", "DÓ                                MI-           FÁ", "Será um coração que se comova,", "FÁ                              SOL", "levantará o que cansado está;", "DÓ                           MI-", "chorará com o que chora,", "FÁ                    SOL", "com o que ri sorrirá.", "", "Será um coração onde brote", "a justiça e a fidelidade;", "semeará a esperança,", "surgirá a verdade."], "capo": 1, "audio": "audio/1-entrada-vos-todos-sereis.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026"}, {"m": "penitencial", "n": "1.2", "t": "Senhor, tem piedade", "sub": "Povo pecador", "a": null, "yt": "https://www.youtube.com/watch?v=Ih6MXnwmFe8", "ytl": "DesafinaçõesTV", "q": "Senhor tem piedade somos o teu povo pecador", "L": ["SOL              RE           SOL  DO RE", "Senhor tem piedade de nós.", "SOL                               RE", "Somos o Teu povo pecador,", "DO                   RE     SOL         Mi-", "Toma a nossa vida de pecado e dor*", "DO                    RE            SOL   DO  RE", "Enche o nosso espírito de amor", "", "SOL      RE            SOL DO RE", "Cristo tem piedade de nós…", "Somos o Teu povo pecador,", "Toma a nossa vida de pecado e dor*", "Enche o nosso espírito de amor", "", "Senhor tem piedade de nós.", "Somos o Teu povo pecador,", "Toma a nossa vida de pecado e dor*", "Enche o nosso espírito de amor"], "capo": 2, "audio": "audio/2-ato-penitencial-senhor-tem-piedade.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026"}, {"m": "aleluia", "n": "1.3", "t": "Aleluia, a Palavra é Deus em nós", "a": null, "yt": "https://www.youtube.com/watch?v=8QBVUHwgo9c", "ytl": "Coro de Jovens SDR", "q": "Aleluia a Palavra é Deus em nós", "L": ["SOL  SI-  DO  RÉ", "", "", "SOL  SI-  DO            RÉ", "Aleluia, a .Pa.la.vra é Deus em nós*", "SOL  SI-       DO           RÉ", "Aleluia, a Palavra é Deus em nós*", " SOL       SI-   DO   RÉ", "Aleluia, Aleluia, Aleluia", "  SOL       SI-  DO   RE     SOL", "Aleluia, Aleluia, A – le – luia"], "capo": 3, "audio": "audio/3-aclamacao-aleluia-a-palavra-e-deus-em-nos.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026"}, {"m": "ofertorio", "n": "1.6", "t": "Louvado sejas, Senhor", "sub": "Pela vida de todos nós", "a": "Pe. Alfredo Juvandes", "yt": "https://www.youtube.com/watch?v=6OxEpFJAZhQ", "ytl": "Coro Juvenil S. Pedro do Mar", "q": "Louvado sejas Senhor pela vida de todos nós Juvandes", "L": ["RÉ  LÁ  SI-  FÁ#- SOL LÁ  RÉ", "", "RÉ              LÁ", "Pela vida de todos nós,", "SI-                    FÁ#", "Que sorri ao nascer do sol,", "SOL          RÉ", "Pela fé e a dor de quem sofre,", "   SOL               LÁ", "Louvado sejas, Senhor.", "", "RÉ                LÁ", "Pelo pão que nos faz viver,", "SI-                  FÁ#", "Pelo vinho que nos sacia,", "SOL                RÉ", "Pela fome de tantos sem pão,", "SOL          LÁ       RÉ", "Louvado sejas, Senhor.", "", "SOL                         LÁ", "Louvado sejas, Senhor", "          RÉ", "Louvado sejas!", "SOL                                                  LÁ", "Louvado por estes dons que nos dás,", "                RÉ", "Louvado sejas! (bis)", "", "RÉ                    LÁ         SI-", "Pela música e pela alegria,", "                      FÁ#", "Que ecoam bem dentro de nós,", "SOL                            RÉ", "Pelo sonho de um mundo em paz,", "SOL                       LÁ", "Louvado sejas, Senhor.", "", "RÉ                LÁ", "Pelo sol que aquece esta terra,", "SI-                         FÁ#", "Pela luz que ilumina o dia,", "SOL                        RÉ", "Pelo silêncio que fala de ti:", "SOL          LÁ        RÉ", "Louvado sejas, Senhor!"], "audio": "audio/4-ofertorio-louvado-sejas-senhor.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026"}, {"m": "santo", "n": "1.7", "t": "Santo, Santo é o Senhor", "sub": "Escuteiros", "a": null, "yt": "https://www.youtube.com/watch?v=5PDSoW2lKD4", "ytl": "Coral Juvenil de S. Tiago", "q": "Santo Santo é o Senhor escuteiros", "L": ["DO", "Santo Santo é o Senhor,", "                         (Santo Santo é o Senhor)", "                               RÉ-", "Senhor Deus do Universo,", "                        (Senhor Deus do Universo)", "                              SOL", "O céu e a terra proclamam", "                     (O céu e a terra proclamam)", "             DO    FÁ   DO", "a Vossa Gló-ó-ó-ó-ria! (BIS)", "", "   DO                  FÁ", "O céu e a terra proclamam a Vossa glória:", "  SOL                DO", "Hossana nas alturas!", "DO                                 FÁ", "Bendito o que vem em nome do Senhor:", " RÉ-          SOL     DO", "Hossana nas alturas!", "", "                DO", "Santo Santo é o Senhor…(1)"], "audio": "audio/5-santo-santo-santo-e-o-senhor.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026"}, {"m": "cordeiro", "n": "1.7", "t": "Cordeiro de Deus", "a": "Marcos Alvim", "yt": "https://www.youtube.com/watch?v=7DE3_wFMMiA", "ytl": "Coro de Jovens da Trofa (a gravação do cancioneiro Verbum Dei)", "q": "Cordeiro de Deus Marcos Alvim", "L": [" Ré       Fá#-", "Cordeiro de Deus", "    Si-                Fá#-", "Que tirais o pecado do mundo", "Sol              Fá#-", "Tende piedade de nós", "Sol              Lá", "Tende piedade de nós", "", "Cordeiro de Deus", "Que tirais o pecado do mundo", "Tende piedade de nós", "Tende piedade de nós", "", "Cordeiro de Deus", "Que tirais o pecado do mundo", "Dai-nos a vossa paz", "Dai-nos a vossa paz (2x)"], "audio": "audio/6-cordeiro-de-deus.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026"}, {"m": "comunhao", "n": "1.4", "t": "Eu escolhi-te para amar", "sub": "Amai o meu povo", "a": "M. Arrufat", "yt": "https://www.youtube.com/watch?v=oACWQcDeZ1w", "ytl": "Coro Juvenil S. Pedro do Mar", "q": "Amai o meu povo eu escolhi-te para amar", "L": ["RÉ  FÁ#- SOL LÁ   (2)", "", "RÉ                              FÁ#-", "Amai o Meu povo, diz o Senhor,", "  SOL    MI-        LÁ", "falai ao coração do homem,", "    MI-              SI-", "gritai que o amor venceu,", "                      MI-", "preparai o caminho que vem do Teu", " LÁ", "Redentor.", "RÉ      LÁ", "Eu escolhi-te para amar,", "                MI-     SI-", "Dou-te a força e luz para guiar.", "RÉ       LÁ", "Eu sou consolo em teu olhar,", "MI-          LÁ", "glória a Deus! (bis)", "", "RÉ                             FÁ#-", "Amai o Meu povo, diz o Senhor,", "SOL      MI-                   LÁ", "tirai a cegueira ao Meu povo.", "MI-                 SI-                  MI-", "Eu já fechei contigo a aliança perpétua,", "                         LÁ", "Eu sou o único Deus.", "", "RÉ      LÁ", "Eu escolhi-te para amar,", "                MI-     SI-", "Dou-te a força e luz para guiar.", "RÉ       LÁ                                   MI-", "Eu sou consolo em teu olhar, glória a", "LÁ", "Deus! (bis)", "", "RÉ                          FÁ#-", "Amai o Meu povo, diz o Senhor,", "SOL                      MI-                LÁ", "mostrai-lhes o caminho da liberdade.", "MI-                   SI-", "Eu vos darei fortes asas,", "                                     MI-", "transformarei vossos passos", "                 LÁ", "em caminhos de eternidade."], "audio": "audio/7-comunhao-eu-escolhi-te-para-amar.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026"}, {"m": "final", "n": "", "t": "Maria Lindíssima", "a": "Movimento dos Focolares", "yt": "https://www.youtube.com/watch?v=edayWDyodb8", "ytl": "Pedro das Neves (a gravação indicada no MusiCristo)", "q": "Maria Lindíssima Focolares", "L": ["Intro: MI  LÁ  SI", "", "MI                            LÁ                           SI", "A mais linda do Mundo, a mais linda desta terra", "MI                            LÁ                           SI", "És tão linda que Deus te escolheu", "MI                       LÁ         SI", "E és linda no Céu, és linda no Paraíso", "MI                                  LÁ                           SI", "És tão linda que o Céu te quer cantar", "", "FÁ#-                    DÓ#-        SI              MI", "Porque o Céu azul contém em ti", "FÁ#-                          DÓ#-               SI", "O sol que resplandece entre fogo", "FÁ#-                   DÓ#-     SI              MI", "Tu és o Céu azul maior porque", "LÁ                      FÁ#-            SI", "Tens em ti o Sol que é Jesus", "", "MI     SI         LÁ                      MI  SI", "Linda, és lindíssima Maria", "LÁ", "Como o Céu", "MI     SI         LÁ                      MI  SI", "Linda, és lindíssima Maria", "LÁ                                                                                               MI", "Se bem nós te imitarmos, seremos como, como tu", "", "MI                            LÁ                SI", "És a mãe do Mundo, és a mãe do belo Amor", "MI                     LÁ                        SI", "Do Amor infinito que é Jesus", "MI                            LÁ               SI", "És mãe de cada um, és a mãe de todos nós", "MI                            LÁ                               SI", "Que podemos também ser como tu", "", "FÁ#-                    DÓ#-        SI                        MI", "Quando nos amamos Jesus vem p'ra nós", "FÁ#-                          DÓ#-               SI", "É como se Ele nascesse outra vez", "FÁ#-                   DÓ#-     SI              MI", "E se amamos damos ao Mundo Jesus", "LÁ                      FÁ#-            SI", "E somos como pequenas Maria"], "capo": 2, "audio": "audio/8-saida-maria-lindissima.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026"}];
+const SONGS = [{"m": "entrada", "t": "Como são belos os pés", "sub": "Igreja reunida", "a": "Pe. José Luís Souto Coelho (Movimento Shalom)", "yt": "https://www.youtube.com/watch?v=oukiee-PUwU", "ytl": "cancioneiro Verbum Dei Lisboa", "q": "Como são belos os pés que anunciam a paz", "L": ["DÓ                 FÁ    SOL    DÓ", "Já se ouvem nossos passos a chegar,", "DÓ                  FÁ           DÓ", "já se ouvem nossas vozes de alegria,", "      FÁ            LÁ-", "neste dia que é uma benção", "        RÉ-      DÓ", "para a Igreja reunida", "      FÁ             RÉ-          SOL", "Jesus Cristo nos congrega e faz irmãos", "", "         DÓ       FÁ          DÓ     SOL", "Como são belos os pés que anunciam a Paz", "      DÓ        FÁ        SOL", "E as mãos que repartem o Pão.", "         DÓ       FÁ         DÓ              SOL", "Na refeição do cordeiro da Palavra, Vinho e Pão,", "     DÓ         FÁ     SOL   DÓ", "Somos o povo de Deus em comunhão.", "", "Todos vós que tendes sede,", "vinde beber da fonte da verdade.", "Saciai a vossa fome", "sem pagar vinho nem pão.", "", "Já se mudam nossos corações de pedra", "pela força do Espírito de Deus,", "já vencemos as barreiras", "que destroem a harmonia:", "Jesus Cristo nos congrega e faz irmãos.", "", "Vinde todos que sois pobres,", "injustiçados,", "sem teto ou sem pão:", "vinde ser fraternidade,", "gerar o Cristo, fazer libertação.", "", "Vão morrer os nossos medos de ser livres:", "já calaram tantas vozes derrotistas!", "Já partimos ao encontro,", "dessa terra prometida:", "Jesus Cristo nos congrega e faz irmãos."], "desde": "2026-10-25"}, {"m": "penitencial", "n": "1.2", "t": "Senhor, tem piedade", "sub": "Povo pecador", "a": null, "yt": "https://www.youtube.com/watch?v=Ih6MXnwmFe8", "ytl": "DesafinaçõesTV", "q": "Senhor tem piedade somos o teu povo pecador", "L": ["SOL              RE           SOL  DO RE", "Senhor tem piedade de nós.", "SOL                               RE", "Somos o Teu povo pecador,", "DO                   RE     SOL         Mi-", "Toma a nossa vida de pecado e dor*", "DO                    RE            SOL   DO  RE", "Enche o nosso espírito de amor", "", "SOL      RE            SOL DO RE", "Cristo tem piedade de nós…", "Somos o Teu povo pecador,", "Toma a nossa vida de pecado e dor*", "Enche o nosso espírito de amor", "", "Senhor tem piedade de nós.", "Somos o Teu povo pecador,", "Toma a nossa vida de pecado e dor*", "Enche o nosso espírito de amor"], "capo": 2, "audio": "audio/2-ato-penitencial-senhor-tem-piedade.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026", "desde": "2026-10-18"}, {"m": "aleluia", "n": "1.3", "t": "Aleluia, a Palavra é Deus em nós", "a": null, "yt": "https://www.youtube.com/watch?v=8QBVUHwgo9c", "ytl": "Coro de Jovens SDR", "q": "Aleluia a Palavra é Deus em nós", "L": ["SOL  SI-  DO  RÉ", "", "", "SOL  SI-  DO            RÉ", "Aleluia, a .Pa.la.vra é Deus em nós*", "SOL  SI-       DO           RÉ", "Aleluia, a Palavra é Deus em nós*", " SOL       SI-   DO   RÉ", "Aleluia, Aleluia, Aleluia", "  SOL       SI-  DO   RE     SOL", "Aleluia, Aleluia, A – le – luia"], "capo": 3, "audio": "audio/3-aclamacao-aleluia-a-palavra-e-deus-em-nos.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026", "desde": "2026-10-18"}, {"m": "ofertorio", "n": "1.6", "t": "Louvado sejas, Senhor", "sub": "Pela vida de todos nós", "a": "Pe. Alfredo Juvandes", "yt": "https://www.youtube.com/watch?v=6OxEpFJAZhQ", "ytl": "Coro Juvenil S. Pedro do Mar", "q": "Louvado sejas Senhor pela vida de todos nós Juvandes", "L": ["RÉ  LÁ  SI-  FÁ#- SOL LÁ  RÉ", "", "RÉ              LÁ", "Pela vida de todos nós,", "SI-                    FÁ#", "Que sorri ao nascer do sol,", "SOL          RÉ", "Pela fé e a dor de quem sofre,", "   SOL               LÁ", "Louvado sejas, Senhor.", "", "RÉ                LÁ", "Pelo pão que nos faz viver,", "SI-                  FÁ#", "Pelo vinho que nos sacia,", "SOL                RÉ", "Pela fome de tantos sem pão,", "SOL          LÁ       RÉ", "Louvado sejas, Senhor.", "", "SOL                         LÁ", "Louvado sejas, Senhor", "          RÉ", "Louvado sejas!", "SOL                                                  LÁ", "Louvado por estes dons que nos dás,", "                RÉ", "Louvado sejas! (bis)", "", "RÉ                    LÁ         SI-", "Pela música e pela alegria,", "                      FÁ#", "Que ecoam bem dentro de nós,", "SOL                            RÉ", "Pelo sonho de um mundo em paz,", "SOL                       LÁ", "Louvado sejas, Senhor.", "", "RÉ                LÁ", "Pelo sol que aquece esta terra,", "SI-                         FÁ#", "Pela luz que ilumina o dia,", "SOL                        RÉ", "Pelo silêncio que fala de ti:", "SOL          LÁ        RÉ", "Louvado sejas, Senhor!"], "audio": "audio/4-ofertorio-louvado-sejas-senhor.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026", "desde": "2026-10-18"}, {"m": "santo", "n": "1.7", "t": "Santo, Santo é o Senhor", "sub": "Escuteiros", "a": null, "yt": "https://www.youtube.com/watch?v=5PDSoW2lKD4", "ytl": "Coral Juvenil de S. Tiago", "q": "Santo Santo é o Senhor escuteiros", "L": ["DO", "Santo Santo é o Senhor,", "                         (Santo Santo é o Senhor)", "                               RÉ-", "Senhor Deus do Universo,", "                        (Senhor Deus do Universo)", "                              SOL", "O céu e a terra proclamam", "                     (O céu e a terra proclamam)", "             DO    FÁ   DO", "a Vossa Gló-ó-ó-ó-ria! (BIS)", "", "   DO                  FÁ", "O céu e a terra proclamam a Vossa glória:", "  SOL                DO", "Hossana nas alturas!", "DO                                 FÁ", "Bendito o que vem em nome do Senhor:", " RÉ-          SOL     DO", "Hossana nas alturas!", "", "                DO", "Santo Santo é o Senhor…(1)"], "audio": "audio/5-santo-santo-santo-e-o-senhor.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026", "desde": "2026-10-18"}, {"m": "cordeiro", "n": "1.7", "t": "Cordeiro de Deus", "a": "Marcos Alvim", "yt": "https://www.youtube.com/watch?v=7DE3_wFMMiA", "ytl": "Coro de Jovens da Trofa (a gravação do cancioneiro Verbum Dei)", "q": "Cordeiro de Deus Marcos Alvim", "L": [" Ré       Fá#-", "Cordeiro de Deus", "    Si-                Fá#-", "Que tirais o pecado do mundo", "Sol              Fá#-", "Tende piedade de nós", "Sol              Lá", "Tende piedade de nós", "", "Cordeiro de Deus", "Que tirais o pecado do mundo", "Tende piedade de nós", "Tende piedade de nós", "", "Cordeiro de Deus", "Que tirais o pecado do mundo", "Dai-nos a vossa paz", "Dai-nos a vossa paz (2x)"], "audio": "audio/6-cordeiro-de-deus.mp3", "audiol": "Coro da paróquia, missa de 18 de outubro de 2026", "desde": "2026-10-18"}, {"m": "comunhao", "t": "Onde Deus te levar", "a": "Maria Durão", "yt": "https://www.youtube.com/watch?v=n4LukDtnSHM", "ytl": "Alberto Mendonça", "q": "Onde Deus te levar Vitamina C", "L": ["LÁ                   DÓ#-", "Podes achar que não tens", "          RÉ             MI", "p'ra onde ir, nem que fazer.", "LÁ                       DÓ#-", "Não sabes bem quem és aqui,", "       RÉ                  MI", "neste mundo tão grande e frio.", "RÉ                        MI", "Mas há qualquer coisa em ti", "               LÁ  LÁ7            RÉ", "que te faz querer, querer ser alguém,", "MI             LÁ", "querer ser alguém.", "", "LÁ7                 RÉ            MI", "E a vida não vai parar, vai como vento,", "             LÁ              FÁ#-", "tens tudo a dar, não percas tempo.", "         RÉ              MI", "Podes saber que vais chegar", "                LÁ", "onde Deus te levar.", "", "                    DÓ#-", "Mas pode ser tão difícil", "          RÉ            MI", "de acreditar em Deus assim.", "LÁ                        DÓ#-", "Será que Deus se vai lembrar", "          RÉ            MI", "de me ajudar? Será que sim?", "RÉ                        MI", "Mas há qualquer coisa em mim", "               LÁ  LÁ7    RÉ  MI     LÁ", "que me faz querer: acreditar, acreditar!"], "desde": "2026-10-25", "audio": "https://www.vitaminac.pt/audio/onde-deus-te-levar-schoenstatt.mp3", "audiof": "Campinácios (Schoenstatt), via Vitamina C", "audiol": "Gravação dos Campinácios (Schoenstatt), no site Vitamina C (vitaminac.pt)"}, {"m": "final", "t": "Guiado pela mão", "a": null, "yt": "https://www.vitaminac.pt/guiado-pela-mao/", "ytl": "Vitamina C", "q": "Guiado pela mão Vitamina C", "L": ["SOL          DÓ               RÉ", "Guiado pela mão com Jesus eu vou,", "              SOL                      MI-", "e sigo como ovelha que encontrou o Pastor.", "             DÓ               RÉ", "Guiado pela mão com Jesus eu vou,", "           SOL SOL7", "aonde Ele vai.", "Guiado pela mão com Jesus eu vou,", "e sigo como ovelha que encontrou o Pastor.", "Guiado pela mão com Jesus eu vou,", "           SOL DÓ         SOL", "aonde Ele vai, aonde Ele vai.", "", "      DÓ            RÉ          SOL          MI-", "Se Jesus me diz: «amigo, deixa tudo e vem comigo»,", "      DÓ         RÉ          SOL SOL7", "como posso resistir ao seu amor?", "      DÓ            RÉ          SOL          MI-", "Se Jesus me diz: «amigo, deixa tudo e vem comigo»,", "       DÓ           RÉ            SOL  DÓ SOL", "minha mão porei na sua e irei com Ele.", "", "Se Jesus me diz: «amigo, deixa tudo e vem comigo»,", "como posso ser feliz sem ir com Ele?", "Se Jesus me diz: «amigo, deixa tudo e vem comigo»,", "seguirei o seu caminho e irei com Ele."], "desde": "2026-10-25", "audio": "https://www.vitaminac.pt/audio/guiado-pela-mao.mp3", "audiof": "Gravação Vitamina C", "audiol": "Gravação do site Vitamina C (vitaminac.pt), em Lá; o coro canta em Sol"}];
+const ARQ = document.documentElement.dataset.view === "arquivo";
 /* [id, título da secção, etiqueta curta para a navegação] */
 const MOMENTS = [
   ["entrada","Entrada","Entrada"],["penitencial","Ato penitencial","Ato penitencial"],["aleluia","Aclamação ao Evangelho","Aclamação"],
   ["ofertorio","Ofertório","Ofertório"],["santo","Santo","Santo"],["cordeiro","Cordeiro de Deus","Cordeiro de Deus"],
-  ["comunhao","Comunhão","Comunhão"],["final","Saída","Saída"],["maria","Nossa Senhora","Nossa Senhora"]
+  ["comunhao","Comunhão","Comunhão"],["final","Saída","Saída"],["maria","Nossa Senhora","Nossa Senhora"],
+  ["outros","Outros cânticos","Outros"]
 ];
+SONGS.forEach(s => { if (!MOMENTS.some(([id]) => id === s.m)) s.m = "outros"; });
+
+/* ---------- Arquivo: quando foi cantado ---------- */
+const MESES = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+function fmtData(d, ano){ const [y, m, dd] = d.split("-").map(Number); return dd + " de " + MESES[m-1] + (ano ? " de " + y : ""); }
+function fmtPeriodo(p){
+  if (!p.de) return "até " + fmtData(p.ate, true);
+  if (p.de === p.ate) return "a " + fmtData(p.de, true);
+  return "de " + fmtData(p.de, p.de.slice(0,4) !== p.ate.slice(0,4)) + " a " + fmtData(p.ate, true);
+}
+function usoTexto(s){
+  const u = (s.usado || []).filter(p => p.ate);
+  return u.length ? "Cantado " + u.map(fmtPeriodo).join("; ") + "." : "";
+}
 
 /* ---------- Acordes (notação latina DÓ RÉ- FÁ#- SIb, transposição, Dó Ré Mi / C D E) ---------- */
 const BASE = {DO:0,RE:2,MI:4,FA:5,SOL:7,LA:9,SI:11};
@@ -422,6 +463,8 @@ function songCard(s, i){
       </div>
       ${s.audio ? `<button type="button" class="play" data-play="${i}" aria-label="Ouvir ${esc(s.t)}">${PLAY_BTN}<span class="play-label">Ouvir</span></button>` : ""}
     </div>
+    ${ARQ && (usoTexto(s) || s.nota) ? `<p class="when">${esc([usoTexto(s), s.nota].filter(Boolean).join(" "))}</p>` : ""}
+    ${ARQ ? `<details class="more"><summary><span class="fieis-only">Ver a letra</span><span class="musico-only">Ver os acordes</span></summary>` : ""}
     <div class="musico-only">
       ${s.capo ? `<p class="capo">Guitarra: travessão na ${s.capo}.ª casa</p>` : ""}
       ${hasChords ? `<div class="transp">Tom
@@ -432,6 +475,7 @@ function songCard(s, i){
                    : `<p class="empty">Este cântico está no documento só com o título. Falta acrescentar a letra e os acordes.</p>`}
     </div>
     <div class="fieis-only">${renderLyrics(s)}</div>
+    ${ARQ ? "</details>" : ""}
   </article>`;
 }
 function build(){
@@ -440,6 +484,7 @@ function build(){
   nav.innerHTML = present.map(([id,,short]) => `<a href="#${id}">${short}</a>`).join("");
   main.innerHTML = present.map(([id, label]) => {
     const list = SONGS.map((s, i) => [s, i]).filter(([s]) => s.m === id);
+    if (ARQ) list.sort((a, b) => a[0].t.localeCompare(b[0].t, "pt"));
     return `<section class="moment" id="${id}" aria-labelledby="h-${id}"><h2 id="h-${id}">${STAR}<span>${label}</span></h2>` +
       list.map(([s, i]) => songCard(s, i)).join("") + "</section>";
   }).join("");
@@ -528,7 +573,7 @@ function spy(){
   if (!sections.length) return;
   const y = bar.getBoundingClientRect().bottom + 24;
   let cur = null;
-  sections.forEach(sec => { if (sec.getBoundingClientRect().top <= y) cur = sec.id; });
+  sections.forEach(sec => { if (!sec.hidden && sec.getBoundingClientRect().top <= y) cur = sec.id; });
   if (innerHeight + scrollY >= document.documentElement.scrollHeight - 2) cur = sections[sections.length-1].id;
   if (cur === active) return;
   const first = active === null;
@@ -607,7 +652,7 @@ function measurePlayer(){ if (!player.hidden) root.style.setProperty("--player-h
 function setMediaSession(s){
   if (!("mediaSession" in navigator)) return;
   try {
-    navigator.mediaSession.metadata = new MediaMetadata({title: s.t, artist: "Coro da paróquia", album: "Cânticos da Missa · " + momentLabel(s.m)});
+    navigator.mediaSession.metadata = new MediaMetadata({title: s.t, artist: s.audiof || "Coro da paróquia", album: "Cânticos da Missa · " + momentLabel(s.m)});
     const H = (k, f) => { try { navigator.mediaSession.setActionHandler(k, f); } catch (e) {} };
     H("play", () => { if (audio) audio.play().catch(() => {}); });
     H("pause", () => { if (audio) audio.pause(); });
@@ -626,7 +671,7 @@ function openPlayer(i, autoplay){
     a.src = s.audio;  /* caminho relativo ou data: URI, tanto faz */
     a.playbackRate = rate;
     plTitle.textContent = s.t;
-    plSub.textContent = momentLabel(s.m) + " · Coro da paróquia";
+    plSub.textContent = momentLabel(s.m) + " · " + (s.audiof || "Coro da paróquia");
     plMsg.textContent = "";
     document.getElementById("c" + i).classList.add("current");
     setMediaSession(s);
@@ -676,6 +721,22 @@ plSeek.addEventListener("input", () => {
 plSeek.addEventListener("change", () => { seeking = false; if (audio) audio.currentTime = +plSeek.value; updateTime(); });
 if (window.ResizeObserver) new ResizeObserver(measurePlayer).observe(player);
 
+/* ---------- Pesquisa no arquivo ---------- */
+function filtrar(){
+  const q = norm(document.getElementById("q").value);
+  let n = 0;
+  SONGS.forEach((s, i) => {
+    const hit = !q || norm([s.t, s.sub, s.a, s.L.filter(l => !isChordLine(l)).join(" ")].filter(Boolean).join(" ")).includes(q);
+    document.getElementById("c" + i).hidden = !hit;
+    if (hit) n++;
+  });
+  document.querySelectorAll("section.moment").forEach(sec => { sec.hidden = !sec.querySelector("article.song:not([hidden])"); });
+  links.forEach(a => { const sec = document.getElementById(a.getAttribute("href").slice(1)); a.hidden = !sec || sec.hidden; });
+  document.getElementById("found").textContent = !q ? SONGS.length + (SONGS.length === 1 ? " cântico no arquivo" : " cânticos no arquivo")
+    : n ? n + (n === 1 ? " cântico encontrado" : " cânticos encontrados") : "Nenhum cântico encontrado.";
+  measureBar(); navEnd(); spy();
+}
+
 /* ---------- Arranque ---------- */
 build();
 sections = Array.from(document.querySelectorAll("section.moment"));
@@ -684,6 +745,7 @@ setNotation(notation);
 applyFs(false);
 paintTheme();
 modeBtn.setAttribute("aria-pressed", root.dataset.mode === "musico");
+if (ARQ) { document.getElementById("q").addEventListener("input", filtrar); filtrar(); }
 if (location.hash === "#musico") { try { localStorage.setItem("cc-mode", "musico"); } catch (e) {} }
 /* #player-test: abre o leitor com o primeiro cântico sem tocar (verificação em headless; a duração vai para o título) */
 if (location.hash === "#player-test") { testMode = true; openPlayer(0, false); audio.preload = "metadata"; audio.load(); }
