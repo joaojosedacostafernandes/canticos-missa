@@ -146,6 +146,7 @@ h1{margin:0;font-family:var(--display);font-weight:600;font-size:clamp(2.25rem,1
 /* Botão Ouvir em cada cântico (ambos os modos) e estado "a tocar" */
 .song-head{align-items:flex-start}
 .titles{flex:1 1 0}
+a.play{text-decoration:none}
 .play{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px 0 10px;border-radius:999px;border:1px solid var(--blue);background:var(--paper);color:var(--blue);font-family:var(--body);font-size:.875rem;font-weight:600;line-height:1;cursor:pointer;transition:background-color .15s ease-out,color .15s ease-out,transform .1s ease-out}
 .play .ic{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--blue);color:var(--on-blue);transition:background-color .15s ease-out,color .15s ease-out}
 .play .ic svg{width:13px;height:13px;fill:currentColor}
@@ -461,7 +462,8 @@ function songCard(s, i){
         ${s.sub ? `<p class="sub">${esc(s.sub)}</p>` : ""}
         ${s.a ? `<p class="author">${esc(s.a)}</p>` : ""}
       </div>
-      ${s.audio ? `<button type="button" class="play" data-play="${i}" aria-label="Ouvir ${esc(s.t)}">${PLAY_BTN}<span class="play-label">Ouvir</span></button>` : ""}
+      ${s.audio ? `<button type="button" class="play" data-play="${i}" aria-label="Ouvir ${esc(s.t)}">${PLAY_BTN}<span class="play-label">Ouvir</span></button>`
+        : s.ytplay ? `<a class="play" href="${esc(s.ytplay)}" target="_blank" rel="noopener" aria-label="Ouvir ${esc(s.t)} no YouTube (abre noutro separador)">${PLAY_BTN}<span>YouTube</span></a>` : ""}
     </div>
     ${ARQ && (usoTexto(s) || s.nota) ? `<p class="when">${esc([usoTexto(s), s.nota].filter(Boolean).join(" "))}</p>` : ""}
     ${ARQ ? `<details class="more"><summary><span class="fieis-only">Ver a letra</span><span class="musico-only">Ver os acordes</span></summary>` : ""}
