@@ -59,6 +59,16 @@ body.nocursor{cursor:none}
 .ln.echo{font-size:calc(var(--fs)*.74);font-weight:700;font-style:italic;color:var(--acc);padding-left:1.1em;position:relative;margin-top:-8px}
 .ln.echo::before{content:"";position:absolute;left:.3em;top:50%;transform:translateY(-50%);width:0;height:0;border-left:.34em solid currentColor;border-top:.22em solid transparent;border-bottom:.22em solid transparent;opacity:.8}
 .x2{display:inline-block;vertical-align:middle;font-style:normal;font-size:.4em;font-weight:900;letter-spacing:0;background:var(--gold);color:#1b1b1b;border-radius:999px;padding:.14em .6em .1em;margin-left:.45em;box-shadow:0 2px 10px rgba(0,0,0,.4);text-shadow:none;transform:translateY(-.12em)}
+/* Um só diapositivo por cântico: estrofes em colunas (--cols), cada estrofe inteira numa coluna, linhas compridas quebram com recuo */
+.lyr.one{left:80px;right:80px;top:96px;bottom:70px}
+.lyr.one .in{display:block;width:100%;column-count:var(--cols,1);column-gap:80px;column-rule:2px solid rgba(255,255,255,.12)}
+.lyr.one .st{break-inside:avoid;gap:calc(var(--fs)*.12);padding-bottom:calc(var(--fs)*.6)}
+.lyr.one .st+.st{margin-top:0}
+.lyr.one .ln{white-space:normal;text-wrap:balance;line-height:1.14;padding:0 .3em;animation-delay:calc(min(var(--d),12)*60ms + 100ms)}
+.lyr.one .ln.echo{margin-top:0}
+.lyr.one .st.rf .ln{color:#fff3cc;text-shadow:0 0 28px rgba(255,214,110,.55),0 3px 6px rgba(0,0,0,.45),0 10px 34px rgba(0,0,0,.5)}
+.lyr.one .st.rf .ln.echo{color:var(--acc)}
+.lyr.one .tag{font-size:max(18px,calc(var(--fs)*.42));padding:.25em .9em .2em;margin-bottom:calc(var(--fs)*.15)}
 .refrain .ln{color:#fff3cc;text-shadow:0 0 28px rgba(255,214,110,.55),0 3px 6px rgba(0,0,0,.45),0 10px 34px rgba(0,0,0,.5)}
 .refrain .ln.echo{color:var(--acc)}
 .tag{font-size:28px;font-weight:900;letter-spacing:.24em;text-transform:uppercase;color:#2a1d05;background:linear-gradient(180deg,#f6dc98,#d8b460);border-radius:999px;padding:8px 26px 6px;margin-bottom:22px;box-shadow:0 4px 18px rgba(0,0,0,.35);animation:up .5s ease-out both}
@@ -297,22 +307,18 @@ function splitStanza(st){
   return out;
 }
 function norm(t){ return t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9 ]/g,"").replace(/\s+/g," ").trim(); }
-/* Diapositivos de um cântico: cada estrofe inteira num diapositivo; estrofes seguidas juntam-se no mesmo diapositivo
-   enquanto couberem em MAXL linhas. O refrão (1.ª linha com as palavras do título, ou estrofe repetida noutro sítio,
-   só em cânticos com 4+ estrofes) fica sempre sozinho, para levar a etiqueta. */
+/* Diapositivo de um cântico: a letra inteira num só diapositivo (não se muda de diapositivo a meio do cântico).
+   O refrão, se se repetir, aparece uma vez só. O refrão (1.ª linha com as palavras do título, ou estrofe repetida noutro sítio,
+   só em cânticos com 4+ estrofes) leva a etiqueta «Refrão». */
 function songSlides(song){
   const stanzas = songStanzas(song);
   const tw = norm(song.t).split(" ").filter(w => w.length > 2);
   const keys = stanzas.map(s => norm(s.map(l => l.text).join(" ")));
   const isRef = stanzas.map((s, i) => stanzas.length >= 4 &&
     ((tw.length > 0 && tw.every(w => norm(s[0].text).split(" ").includes(w))) || keys.some((k, j) => j !== i && k === keys[i])));
-  const slides = [], count = sl => sl.groups.reduce((a, g) => a + g.length, 0);
-  stanzas.forEach((st, i) => {
-    const parts = splitStanza(st), last = slides[slides.length - 1];
-    if (parts.length === 1 && !isRef[i] && last && !last.refrain && !last.split && count(last) + st.length <= MAXL) last.groups.push(st);
-    else parts.forEach(lines => slides.push({groups: [lines], refrain: isRef[i], split: parts.length > 1}));
-  });
-  return slides;
+  const groups = [], refs = [];
+  stanzas.forEach((st, i) => { if (!isRef[i] || keys.indexOf(keys[i]) === i){ groups.push(st); refs.push(isRef[i]); } });
+  return [{groups, refs}];
 }
 
 /* Linhas das partes da missa: "S: " sacerdote, "T: " todos, "R: " rubrica, "# " título, "" espaço; sem prefixo continua quem falava */
@@ -343,7 +349,7 @@ const ITEMS = [{l:"Bem-vindos", s:"Início", i:0, m:"open"}];   // entradas do m
 const used = new Set();
 function addSong(id, label, song){
   ITEMS.push({l:label, s:song.t, i:deck.length, m:id, song:true});
-  songSlides(song).forEach((sl, k, all) => deck.push({type:"lyric", m:id, label, song, groups: sl.groups, refrain: sl.refrain, k, total: all.length}));
+  songSlides(song).forEach((sl, k, all) => deck.push({type:"lyric", m:id, label, song, groups: sl.groups, refs: sl.refs, k, total: all.length}));
   used.add(song);
 }
 const V = MISSA.variavel;
@@ -374,9 +380,9 @@ for (const [k, m] of Object.entries(KEYS)){ const it = ITEMS.find(x => x.m === m
 
 function lyricHTML(d){
   let n = 0;
-  const groups = d.groups.map(g => `<div class="st">` + g.map(l =>
+  const groups = d.groups.map((g, gi) => `<div class="st${d.refs[gi] ? " rf" : ""}">` + (d.refs[gi] ? '<div class="tag">Refrão</div>' : "") + g.map(l =>
     `<p class="ln${l.echo ? " echo" : ""}" style="--d:${n++}">${esc(l.text)}${l.times ? `<span class="x2">×${l.times}</span>` : ""}</p>`).join("") + `</div>`).join("");
-  return `<div class="lyr fit${d.refrain ? " refrain" : ""}"><div class="in">${d.refrain ? '<div class="tag">Refrão</div>' : ""}${groups}</div></div>
+  return `<div class="lyr one fit"><div class="in">${groups}</div></div>
     <div class="crumb"><i></i><b>${esc(d.label)}</b><span>${esc(d.song.t)}</span></div>`;
 }
 function riteHTML(d){
@@ -415,7 +421,8 @@ let els = [];
 function fitText(el){
   const box = el.querySelector(".fit"); if (!box || box.dataset.fit) return;
   box.dataset.fit = "1";
-  const lyric = box.classList.contains("lyr"), base = lyric ? 78 : 54, min = lyric ? 50 : 44;
+  if (box.classList.contains("one")) return fitLyric(box);
+  const base = 54, min = 44;
   const inner = box.querySelector(".in"), W = box.clientWidth, H = box.clientHeight;
   let fs = base, r = 1;
   box.querySelectorAll(".ln").forEach(l => { r = Math.max(r, l.scrollWidth / W); });
@@ -425,6 +432,24 @@ function fitText(el){
     fs = Math.max(min, Math.floor(fs * Math.min(.96, H / inner.offsetHeight)));
     box.style.setProperty("--fs", fs + "px");
   }
+}
+/* Letra de um cântico num só diapositivo: experimenta 1, 2 e 3 colunas e fica com a que dá a letra maior
+   (penaliza linhas partidas); em cada uma procura o maior tamanho que cabe na altura. */
+function fitLyric(box){
+  const inner = box.querySelector(".in"), H = box.clientHeight, lines = [...box.querySelectorAll(".ln")];
+  const fits = () => inner.scrollHeight <= H && inner.scrollWidth <= inner.clientWidth + 1;
+  let best = null;
+  for (const cols of [1, 2, 3]){
+    box.style.setProperty("--cols", cols);
+    let lo = 18, hi = 96;
+    while (hi - lo > 1){ const mid = (lo + hi) >> 1; box.style.setProperty("--fs", mid + "px"); if (fits()) lo = mid; else hi = mid; }
+    box.style.setProperty("--fs", lo + "px");
+    const broken = lines.filter(l => l.getClientRects().length > 1 || l.offsetHeight > lo * 1.6).length / (lines.length || 1);
+    const score = lo * (1 - .35 * broken) * (cols === 1 ? 1.04 : 1);
+    if (!best || score > best.score) best = {cols, fs: lo, score};
+  }
+  box.style.setProperty("--cols", best.cols);
+  box.style.setProperty("--fs", best.fs + "px");
 }
 function go(i){
   i = Math.max(0, Math.min(N-1, i|0)); if (i === cur) return;
