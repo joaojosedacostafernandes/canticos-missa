@@ -480,7 +480,8 @@ function songCard(s, i, tag){
     ${ARQ && (usoTexto(s) || s.nota) ? `<p class="when">${esc([usoTexto(s), s.nota].filter(Boolean).join(" "))}</p>` : ""}
     ${ARQ ? `<details class="more"><summary><span class="fieis-only">Ver a letra</span><span class="musico-only">Ver os acordes</span></summary>` : ""}
     <div class="musico-only">
-      ${s.capo ? `<p class="capo">Guitarra: travessão na ${s.capo}.ª casa</p>` : ""}
+      ${s.tons ? s.tons.map(t => `<p class="capo">${t.q === "M" ? "Só mulheres" : "Homens e mulheres"}: ${esc(t.txt || (t.capo ? `travessão na ${t.capo}.ª casa` : "sem travessão"))}</p>`).join(" ")
+        : s.capo ? `<p class="capo">Guitarra: travessão na ${s.capo}.ª casa</p>` : ""}
       ${hasChords ? `<div class="transp">Tom
         <button type="button" data-i="${i}" data-d="-1" aria-label="Descer meio tom">−</button>
         <output id="o${i}">${fmtShift(shift[i]||0)}</output>
