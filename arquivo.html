@@ -441,6 +441,11 @@ function lyricBlocks(s){
     const first = (b.find(x => !x.echo) || b[0]).t;
     return startsTitle(first) || hasWords(first) || counts[key(b)] > 1;
   });
+  /* "rf" nos dados (1.ª linha de cada estrofe que é refrão) marca o refrão à mão e substitui a heurística */
+  if (s.rf && s.rf.length) {
+    const marks = s.rf.map(t => norm(cleanLyric(t).t));
+    return parsed.map(lines => ({lines, refrain: marks.includes(norm((lines.find(x => !x.echo) || lines[0]).t))}));
+  }
   const all = isRef.every(Boolean);
   return parsed.map((lines, i) => ({lines, refrain: !all && isRef[i]}));
 }
